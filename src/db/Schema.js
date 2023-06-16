@@ -122,7 +122,7 @@ const cloth = mongoose.Schema({
         type:String,
         required:true,
     },
-    Mearment_Attribute:{
+    Measurment:{
         type:Object,
         required:true,
     },
