@@ -96,7 +96,9 @@ const role = mongoose.Schema({
         type:String,
         required:true
     }
-},{timestamps:true});
+},{
+    timestamps:true
+});
 const userInRole = mongoose.Schema({
     UserId:{
         type:String,
