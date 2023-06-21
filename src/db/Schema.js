@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const client = mongoose.Schema({
     UserID:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
     },
     BusinessName:{
@@ -101,7 +102,8 @@ const role = mongoose.Schema({
 });
 const userInRole = mongoose.Schema({
     UserId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
         required:true
     },
     RoleId:{
@@ -113,12 +115,10 @@ const userInRole = mongoose.Schema({
     timestamps:true
 });
 const clientShops = mongoose.Schema({
-    ShopId:{
-        type:String,
-        required:true
-    },
+    
     ClientId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Clients",
         required:true,
     },
     StoreName:{
@@ -163,7 +163,8 @@ const clientShops = mongoose.Schema({
 });
 const customers = mongoose.Schema({
     UserId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
         required:true,
     },
     FullName:{
@@ -224,29 +225,52 @@ const productType = mongoose.Schema({
     }
 
 });
+const clientProductType = mongoose.Schema({
+    client_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Clients",
+        required:true
+    },
+    Title:{
+        type:String,
+        required:true
+    },
+    ImageUrl:{
+        type:String,
+        required:true,
+    },
+    MeasurmentAttribute:{
+        type:Object,
+        required:true
+    },
+
+});
 const order = mongoose.Schema({
     OrderId:{
         type:String,
         required:true,
     },
     ClientId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Clients",
         required:true,
     },
     CustomerId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Customer",
         required:true,
     },
     OrderPlacedDate:{
         type:Date,
         required:true,
+        default: Date.now
     },
     Status:{
-        type:Date,
+        type:String,
         required:true,
     },
     OrderType:{
-        type:Array,
+        type:String,
         required:true,
     },
     BillingFullName:{
@@ -312,6 +336,7 @@ const order = mongoose.Schema({
 const orderItem = mongoose.Schema({
     OrderId:{
         type:String,
+        ref:"Order",
         required:true,
     },
     ProductTypeId:{
@@ -365,6 +390,7 @@ const orderPayment = mongoose.Schema(
     {
         OrderId:{
             type:String,
+            ref:"Order",
             required:true,
         },
         PaymentAmount:{
@@ -388,12 +414,13 @@ const Client = mongoose.model("Clients",client);
 const Users = mongoose.model("User",users);
 const Role = mongoose.model("Role",role);
 const UserInRole = mongoose.model("UserInRole",userInRole);
-const ClientShops = mongoose.Schema("ClientShop",clientShops)
+const ClientShops = mongoose.model("ClientShop",clientShops)
 const Customer = mongoose.model("Customer",customers);
 const ProductType = mongoose.model("ProductType",productType);
 const Order = mongoose.model("Order",order);
-const OrderItem = mongoose.model("Cloth",orderItem);
-const OrderPayment = mongoose.model("Measurment",orderPayment);
+const OrderItem = mongoose.model("OrderItem",orderItem);
+const OrderPayment = mongoose.model("OrderPayment",orderPayment);
+const ClinetProductType = mongoose.model("ClientProductType", clientProductType);
 module.exports = {
     Client,
     Users,
@@ -405,4 +432,5 @@ module.exports = {
     Order,
     OrderItem,
     OrderPayment,
+    ClinetProductType,
 };
