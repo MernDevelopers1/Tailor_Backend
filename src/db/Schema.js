@@ -133,7 +133,7 @@ const clientShops = mongoose.Schema({
         type:String,
         required:true,
     },
-    PrimayContactEmail:{
+    PrimaryContactEmail:{
         type:String,
         required:true,
     },
@@ -154,7 +154,7 @@ const clientShops = mongoose.Schema({
         required:true,
     },
     Country:{
-        type:Array,
+        type:String,
         required:true,
     },
     

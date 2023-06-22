@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const { Users, Client, UserInRole } = require("../db/Schema");
+const { Users, Client, UserInRole, ClientShops } = require("../db/Schema");
 const bcrypt = require("bcrypt");
 
 module.exports.addClient = async (req, res) => {
@@ -134,7 +134,8 @@ module.exports.DeleteClient = async (req,res) =>{
     const DeleteClient = await Client.findByIdAndRemove({_id });
     const DeleteUser = await Users.deleteOne({_id:DeleteClient.UserID });
     const DeleteUserImRole = await UserInRole.deleteOne({UserId: id });
-    if(DeleteClient && DeleteUser && DeleteUserImRole)
+    const DeleteStores = await ClientShops.deleteMany({ClientId: id});
+    if(DeleteClient && DeleteUser && DeleteUserImRole && DeleteStores)
       res.status(200).json("Deleted Successfully!!");
   }catch(e){
     // console.log(e);
