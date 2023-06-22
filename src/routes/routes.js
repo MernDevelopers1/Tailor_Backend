@@ -1,9 +1,9 @@
 const express = require('express');
-const { addClient, allClient, getClient, UpdateClient, DeleteClient } = require('../controllers/ClientController');
+const { addClient,  getClient, UpdateClient, DeleteClient,  getAllClient } = require('../controllers/ClientController');
 const router = express.Router();
 //-----------------------Client Routes-----------------------------------
 router.post("/Client",addClient);
-router.get("/Client",allClient);
+router.get("/Client",getAllClient);
 router.get("/Client/:_id",getClient);
 router.patch("/Client",UpdateClient);
 router.delete("/Client/:_id",DeleteClient);

@@ -57,7 +57,7 @@ module.exports.addClient = async (req, res) => {
     res.status(500).send(e);
   }
 };
-module.exports.allClient = async (req,res) =>{
+module.exports.getAllClient = async (req,res) =>{
   try{
 
     const result = await Client.find().populate("UserID","Username").exec();
@@ -130,10 +130,14 @@ module.exports.DeleteClient = async (req,res) =>{
 
     // res.status(200).json(req.params);
     const {_id} = req.params;
-    // res.json(_id);
-    const DeleteClient = await UserInRole.deleteOne({ UserId:  });
-    res.status(200).json(DeleteClient);
+    const id = new mongoose.Types.ObjectId(_id);
+    const DeleteClient = await Client.findByIdAndRemove({_id });
+    const DeleteUser = await Users.deleteOne({_id:DeleteClient.UserID });
+    const DeleteUserImRole = await UserInRole.deleteOne({UserId: id });
+    if(DeleteClient && DeleteUser && DeleteUserImRole)
+      res.status(200).json("Deleted Successfully!!");
   }catch(e){
-    res.status(500).json(e);
+    // console.log(e);
+    res.status(500).send(e);
   }
 }
