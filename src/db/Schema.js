@@ -203,7 +203,8 @@ const customers = mongoose.Schema({
     },
     IsActive:{
         type:Boolean,
-        required:true
+        required:true,
+        default:true
     }
 
     
