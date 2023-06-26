@@ -226,26 +226,27 @@ const productType = mongoose.Schema({
     }
 
 });
-const clientProductType = mongoose.Schema({
-    client_id:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Clients",
-        required:true
-    },
-    Title:{
-        type:String,
-        required:true
-    },
-    ImageUrl:{
-        type:String,
-        required:true,
-    },
-    MeasurmentAttribute:{
-        type:Object,
-        required:true
-    },
-
-});
+const clientProductType = mongoose.Schema(
+    {
+        Client_id:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Clients",
+            required:true
+        },
+        Title:{
+            type:String,
+            required:true
+        },
+        ImageUrl:{
+            type:String,
+            required:true,
+        },
+        MeasurmentAttribute:{
+            type:Object,
+            required:true
+        }
+    }
+);
 const order = mongoose.Schema({
     OrderId:{
         type:String,
@@ -421,7 +422,7 @@ const ProductType = mongoose.model("ProductType",productType);
 const Order = mongoose.model("Order",order);
 const OrderItem = mongoose.model("OrderItem",orderItem);
 const OrderPayment = mongoose.model("OrderPayment",orderPayment);
-const ClinetProductType = mongoose.model("ClientProductType", clientProductType);
+const ClientProductType = mongoose.model("ClientProductType", clientProductType);
 module.exports = {
     Client,
     Users,
@@ -433,5 +434,5 @@ module.exports = {
     Order,
     OrderItem,
     OrderPayment,
-    ClinetProductType,
+    ClientProductType,
 };

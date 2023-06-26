@@ -2,6 +2,7 @@ const express = require('express');
 const { addClient,  getClient, UpdateClient, DeleteClient,  getAllClient } = require('../controllers/ClientController');
 const { addStore, getAllStores, getSpecificClientStores, UpdateStores, DeleteStore } = require('../controllers/StoreController');
 const { addCustomer, getAllCustomer, getCustomer, UpdateCustomer, DeleteCustomer } = require('../controllers/CustomerController');
+const { addProduct, GetAllProduct, GetSpecificClientProduct, UpdateProduct, DeleteProduct } = require('../controllers/ClientProductType');
 const router = express.Router();
 //-----------------------Client Routes Start-----------------------------------
 router.post("/Client",addClient);
@@ -24,6 +25,13 @@ router.get("/Customer/:_id",getCustomer);
 router.patch("/Customer",UpdateCustomer);
 router.delete("/Customer/:_id",DeleteCustomer);
 //=======================Customer Routes End===================================
+//=======================Client Product Routes Start=================================
+router.post("/ClientProduct",addProduct);
+router.get("/ClientProduct",GetAllProduct);
+router.get("/ClientProduct/:Client_id/:_id?",GetSpecificClientProduct);
+router.patch("/ClientProduct",UpdateProduct);
+router.delete("/ClientProduct/:_id",DeleteProduct);
+//=======================Client Product Routes End===================================
 
 // router.get("/",(req,res)=>{
 //     res.send("<h1>Hello World!</h1>");
