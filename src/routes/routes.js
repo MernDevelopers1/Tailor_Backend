@@ -32,11 +32,7 @@ router.get("/ClientProduct/:Client_id/:_id?",GetSpecificClientProduct);
 router.patch("/ClientProduct",UpdateProduct);
 router.delete("/ClientProduct/:_id",DeleteProduct);
 //=======================Client Product Routes End===================================
-
 // router.get("/",(req,res)=>{
 //     res.send("<h1>Hello World!</h1>");
 // });
-
-
-
 module.exports = router;
