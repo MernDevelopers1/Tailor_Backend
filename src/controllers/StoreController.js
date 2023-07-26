@@ -3,9 +3,8 @@ const { ClientShops } = require("../db/Schema");
 
 module.exports.addStore = async (req,res) =>{
     try{
-
-    
-    const {
+        
+        const {
         ClientId,
         StoreName,
         PrimaryContactName,
@@ -30,11 +29,13 @@ module.exports.addStore = async (req,res) =>{
         Country
     });
     const result = await addStore.save();
+    console.log(result);
     res.status(200).json(result);
     }catch(e){
+        console.log(e);
         res.status(500).send(e);
     }
-
+    
 
 
 }

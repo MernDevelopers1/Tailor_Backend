@@ -1,14 +1,16 @@
 const { default: mongoose } = require("mongoose");
 const { Users, Client, UserInRole, ClientShops } = require("../db/Schema");
+const useragent = require('useragent');
 const bcrypt = require("bcrypt");
 
 module.exports.addClient = async (req, res) => {
   try {
+
     const {
       Username,
       Password,
-      LastLoginFromIp,
-      LastLoginAt,
+      
+      
       BusinessName,
       BusinessEmail,
       BusinessPhone,
@@ -20,9 +22,13 @@ module.exports.addClient = async (req, res) => {
       PrimaryContactName,
       PrimaryContactEmail,
       PrimaryContactPhone,
-      LogoUrl,
-      CoverPhotoUrl,
+      
     } = req.body;
+    const LastLoginFromIp = req.ip;
+    const LastLoginAt = useragent.parse(req.headers['user-agent']).device.toString();
+    const LogoUrl = "images/DefaultLogo.png";
+    const CoverPhotoUrl="images/DefaultCover.png";
+  
     if (Password) {
       const HashedPassword = await bcrypt.hash(Password, 10);
       const userdata = new Users({
@@ -96,7 +102,10 @@ module.exports.UpdateClient = async(req,res) =>{
       PrimaryContactPhone,
       LogoUrl,
       CoverPhotoUrl,
+      UserID
     } = req.body;
+    
+    // console.log(req.body);
     const updateClient = await Client.findByIdAndUpdate(_id, { $set: {  
       
       BusinessName,
