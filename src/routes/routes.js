@@ -4,6 +4,9 @@ const { addStore, getAllStores, getSpecificClientStores, UpdateStores, DeleteSto
 const { addCustomer, getAllCustomer, getCustomer, UpdateCustomer, DeleteCustomer } = require('../controllers/CustomerController');
 const { addProduct, GetAllProduct, GetSpecificClientProduct, UpdateProduct, DeleteProduct } = require('../controllers/ClientProductType');
 const router = express.Router();
+const {upload,uploadImage} = require("../controllers/ImageUpload");
+
+router.post('/upload', uploadImage, upload);
 //-----------------------Client Routes Start-----------------------------------
 router.post("/Client",addClient);
 router.get("/Client",getAllClient);
