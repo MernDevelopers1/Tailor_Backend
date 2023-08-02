@@ -1,5 +1,5 @@
 const express = require('express');
-const { addClient,  getClient, UpdateClient, DeleteClient,  getAllClient } = require('../controllers/ClientController');
+const { addClient,  getClient, UpdateClient, DeleteClient,  getAllClient, ClientLogin, Getloginclient } = require('../controllers/ClientController');
 const { addStore, getAllStores, getSpecificClientStores, UpdateStores, DeleteStore } = require('../controllers/StoreController');
 const { addCustomer, getAllCustomer, getCustomer, UpdateCustomer, DeleteCustomer } = require('../controllers/CustomerController');
 const { addProduct, GetAllProduct, GetSpecificClientProduct, UpdateProduct, DeleteProduct } = require('../controllers/ClientProductType');
@@ -9,6 +9,8 @@ const {upload,uploadImage} = require("../controllers/ImageUpload");
 router.post('/upload', uploadImage, upload);
 //-----------------------Client Routes Start-----------------------------------
 router.post("/Client",addClient);
+router.post("/Clientlogin",ClientLogin)
+router.get("/Clientlogin",Getloginclient)
 router.get("/Client",getAllClient);
 router.get("/Client/:_id",getClient);
 router.patch("/Client",UpdateClient);
