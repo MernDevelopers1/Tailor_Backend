@@ -1,14 +1,13 @@
 const bcrypt = require("bcrypt");
 const { Users, Customer, UserInRole } = require("../db/Schema");
 const { default: mongoose } = require("mongoose");
+const useragent = require("useragent");
 
 module.exports.addCustomer = async (req, res) => {
   try {
     const {
       Username,
       Password,
-      LastLoginFromIp,
-      LastLoginAt,
       FullName,
       Phone1,
       Phone2,
@@ -18,8 +17,10 @@ module.exports.addCustomer = async (req, res) => {
       State,
       Zip,
       Country,
-      IsActive,
     } = req.body;
+    const LastLoginFromIp = req.ip;
+    const LastLoginAt = useragent.parse(req.headers['user-agent']).device.toString();
+    
     if (Password) {
       const HashedPassword = await bcrypt.hash(Password, 10);
       const userdata = new Users({
@@ -40,14 +41,15 @@ module.exports.addCustomer = async (req, res) => {
       State,
       Zip,
       Country,
-      IsActive
       });
       Result = await CustomerData.save();
-      const userInRole = new UserInRole({ UserId: Result._id, RoleId: 3 });
+      const userInRole = new UserInRole({ UserId: Result.UserId, RoleId: 3 });
       await userInRole.save();
+      // console.log(Result);
       res.status(200).send(Result);
     }
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 };

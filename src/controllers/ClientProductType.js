@@ -1,8 +1,10 @@
 const { default: mongoose } = require("mongoose");
 const { ClientProductType } = require("../db/Schema");
+const { compareSync } = require("bcrypt");
 
 module.exports.addProduct = async (req,res) =>{
     try{
+        // console.log("Called!");
         const {
             Client_id,
             Title,
@@ -17,11 +19,12 @@ module.exports.addProduct = async (req,res) =>{
         });
 
         const result = await addProduct.save();
-
+        // console.log(result);
         res.status(200).json(result);
 
     }
     catch(e){
+        console.log(e);
         res.status(500).send(e);
     };
 }

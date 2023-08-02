@@ -176,7 +176,6 @@ const customers = mongoose.Schema({
     },
     Phone2:{
         type:String,
-        required:true,
     },
     Email:{
         type:String,
@@ -221,7 +220,7 @@ const productType = mongoose.Schema({
         required:true,
     },
     MeasurmentAttribute:{
-        type:Object,
+        type:Array,
         required:true
     }
 
@@ -242,16 +241,13 @@ const clientProductType = mongoose.Schema(
             required:true,
         },
         MeasurmentAttribute:{
-            type:Object,
+            type:Array,
             required:true
         }
     }
 );
 const order = mongoose.Schema({
-    OrderId:{
-        type:String,
-        required:true,
-    },
+    
     ClientId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Clients",
@@ -337,7 +333,7 @@ const order = mongoose.Schema({
 });
 const orderItem = mongoose.Schema({
     OrderId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"Order",
         required:true,
     },
@@ -391,12 +387,12 @@ const orderItem = mongoose.Schema({
 const orderPayment = mongoose.Schema(
     {
         OrderId:{
-            type:String,
+            type:mongoose.Schema.Types.ObjectId,
             ref:"Order",
             required:true,
         },
         PaymentAmount:{
-            type:Object,
+            type: String,
             required:true,
         },
         AdditionalComments:{
