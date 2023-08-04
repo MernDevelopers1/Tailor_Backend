@@ -9,13 +9,15 @@ module.exports.addProduct = async (req,res) =>{
             Client_id,
             Title,
             ImageUrl,
-            MeasurmentAttribute
+            MeasurmentAttribute,
+            TypeId
         } = req.body;
         const addProduct = new ClientProductType({
             Client_id,
             Title,
             ImageUrl,
-            MeasurmentAttribute
+            MeasurmentAttribute,
+            TypeId
         });
 
         const result = await addProduct.save();
@@ -65,13 +67,15 @@ module.exports.UpdateProduct = async (req,res) => {
             Client_id,
             Title,
             ImageUrl,
-            MeasurmentAttribute
+            MeasurmentAttribute,
+            TypeId
         } = req.body;
         const updateProduct = await ClientProductType.findByIdAndUpdate(_id,{$set:{
             Client_id,
             Title,
             ImageUrl,
-            MeasurmentAttribute 
+            MeasurmentAttribute ,
+            TypeId
         }
     });
     res.status(200).json(updateProduct);

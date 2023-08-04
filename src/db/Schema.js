@@ -243,6 +243,10 @@ const clientProductType = mongoose.Schema(
         MeasurmentAttribute:{
             type:Array,
             required:true
+        },
+        TypeId:{
+            type:String,
+            required:true
         }
     }
 );
@@ -257,6 +261,11 @@ const order = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Customer",
         required:true,
+    },
+    ShopId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"ClientShop",
+        required:true
     },
     OrderPlacedDate:{
         type:Date,
