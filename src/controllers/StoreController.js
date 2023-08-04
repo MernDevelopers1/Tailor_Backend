@@ -49,7 +49,7 @@ module.exports.getAllStores = async (req,res) =>{
 }
 module.exports.getSpecificClientStores = async (req,res) =>{
     try{
-
+        // console.log(req.params);
         const {_id} = req.params;
 
         const id =new mongoose.Types.ObjectId(_id);

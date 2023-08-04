@@ -73,6 +73,7 @@ module.exports.getAllClient = async (req, res) => {
 };
 module.exports.getClient = async (req, res) => {
   try {
+    // console.log(req.params);
     const { _id } = req.params;
     const result = await Client.find({ _id })
       .populate("UserID", "Username")
@@ -192,10 +193,15 @@ module.exports.ClientLogin = async (req, res) => {
 };
 module.exports.Getloginclient = async (req,res) => {
   try{
+      // console.log(req.query);
     const {token} = req.query;
-    const {id} = jwt.verify(token,process.env.Token_key);
-    const data = client.findById({_id:id});
-    res.status(200).send(data[0]);
+    // console.log(token);
+    // console.log(process.env.Token_key);
+    const {_id} = jwt.verify(token,process.env.Token_key);
+    // console.log(_id);
+    const data = await Client.findById({_id});
+    // console.log(data);
+    res.status(200).send(data);
     
   }catch(e){
     console.log(e);
