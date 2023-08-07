@@ -269,7 +269,7 @@ const order = mongoose.Schema({
     },
     OrderPlacedDate:{
         type:Date,
-        required:true,
+        
         default: Date.now
     },
     Status:{
@@ -360,14 +360,14 @@ const orderItem = mongoose.Schema({
     },
     ItemDiscount:{
         type:Number,
-        required:true,
+        
     },
     ItemSalesTax:{
         type:Number,
         required:true,
     },
     DeliveryPickupStatus:{
-        type:Number,
+        type:String,
         required:true,
     },
     ItemStatus:{
@@ -401,7 +401,7 @@ const orderPayment = mongoose.Schema(
             required:true,
         },
         PaymentAmount:{
-            type: String,
+            type: Number,
             required:true,
         },
         AdditionalComments:{
@@ -410,7 +410,7 @@ const orderPayment = mongoose.Schema(
         },
         PaymentDate:{
             type:Date,
-            required:true,
+            default:Date.now
         }
     },
     {
