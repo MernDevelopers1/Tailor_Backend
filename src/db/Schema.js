@@ -12,6 +12,7 @@ const client = mongoose.Schema({
     BusinessEmail:{
         type: String,
         required: true,
+        unique: true
     },
     BusinessPhone:{
         type: String,
@@ -44,6 +45,7 @@ const client = mongoose.Schema({
     PrimaryContactEmail:{
         type: String,
         required: true,
+        unique: true
     },
     PrimaryContactPhone:{
         type: String,
@@ -71,7 +73,8 @@ const client = mongoose.Schema({
 const users = mongoose.Schema({
     Username:{
         type:String,
-        required:true
+        required:true,
+        unique: true
     },
     HashedPassword:{
         type:String,
@@ -136,6 +139,7 @@ const clientShops = mongoose.Schema({
     PrimaryContactEmail:{
         type:String,
         required:true,
+        unique: true
     },
     Address:{
         type:String,
@@ -179,6 +183,8 @@ const customers = mongoose.Schema({
     },
     Email:{
         type:String,
+        required:true,
+        unique: true
     },
     Address:{
         type:String,
@@ -306,31 +312,26 @@ const order = mongoose.Schema({
     },
     ShippingFullName:{
         type:String,
-        required:true,
     },
     ShippingAddress:{
         type:String,
-        required:true,
     },
     ShippingCity:{
         type:String,
-        required:true,
     },
     ShippingState:{
         type:String,
-        required:true,
     },
     ShippingZip:{
         type:String,
-        required:true,
     },
     ShippingCountry:{
         type:String,
-        required:true,
     },
     CompletedAt:{
-        type:String,
-        required:true,
+        type:Date,
+        default:null
+
     },
     AdditionalComments:{
         type:String,
@@ -380,7 +381,7 @@ const orderItem = mongoose.Schema({
     },
    CompletedAt:{
     type:String,
-    required:true,
+    default:null
    },
    AdditionalComments:{
     type:String,

@@ -5,6 +5,7 @@ const { addCustomer, getAllCustomer, getCustomer, UpdateCustomer, DeleteCustomer
 const { addProduct, GetAllProduct, GetSpecificClientProduct, UpdateProduct, DeleteProduct } = require('../controllers/ClientProductType');
 const router = express.Router();
 const {upload,uploadImage} = require("../controllers/ImageUpload");
+const { AddOrder } = require('../controllers/OrderController');
 
 router.post('/upload', uploadImage, upload);
 //-----------------------Client Routes Start-----------------------------------
@@ -37,7 +38,7 @@ router.get("/ClientProduct/:Client_id/:_id?",GetSpecificClientProduct);
 router.patch("/ClientProduct",UpdateProduct);
 router.delete("/ClientProduct/:_id",DeleteProduct);
 //=======================Client Product Routes End===================================
-// router.get("/",(req,res)=>{
-//     res.send("<h1>Hello World!</h1>");
-// });
+//=======================Order Routes==========================================
+router.post("/Order",AddOrder);
+//=======================Order Routes End======================================
 module.exports = router;
