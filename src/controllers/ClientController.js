@@ -165,10 +165,10 @@ module.exports.ClientLogin = async (req, res) => {
       .device.toString();
     if (password) {
       const user = await Users.find({ Username });
-      console.log(user[0]._id);
+      // console.log(user[0]._id);
       if (await bcrypt.compare(password, user[0].HashedPassword)) {
         const userinrole = await UserInRole.find({ UserId: user[0]._id });
-        console.log(userinrole);
+        // console.log(userinrole);
         if (Role === userinrole[0].RoleId) {
           const data = await Client.find({UserID:user[0]._id});
           await Users.findByIdAndUpdate({_id:user[0]._id},{
