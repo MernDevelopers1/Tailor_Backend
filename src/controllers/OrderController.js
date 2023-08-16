@@ -257,3 +257,38 @@ module.exports.DeleteOrder = async (req, res) => {
     res.status(500).send(e);
   }
 };
+module.exports.AddPayment = async (req,res) => {
+  try{
+
+    const {OrderId,PaymentAmount,AdditionalComments} = req.body;
+    const addpayment = new OrderPayment({OrderId,PaymentAmount,AdditionalComments});
+    const result = await addpayment.save();
+    res.status(200).send(result);
+  }catch(e){
+    console.log(e);
+    res.status(500).send(e);
+  }
+}
+module.exports.UpdateOrderStatus = async (req,res) =>{
+  try{
+    const {_id,Status,ItemStatus}= req.body;
+    if(Status){
+      const updatestatus = await Order.findOneAndUpdate({_id},{
+        $set:{Status}
+      },{new:true});
+      res.status(200).send(updatestatus);
+      
+    }else if(ItemStatus){
+      const updatestatus = await OrderItem.findOneAndUpdate({OrderId:_id},{
+        $set:{ItemStatus}
+      },{new:true});
+      console.log(updatestatus);
+      res.status(200).send(updatestatus);
+
+    }
+
+  }catch(e){
+    console.log(e);
+    res.status(500).send(e);
+  }
+}
