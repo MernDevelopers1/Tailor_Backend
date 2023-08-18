@@ -407,7 +407,7 @@ const orderPayment = mongoose.Schema(
         },
         AdditionalComments:{
             type:String,
-            required:true,
+            // required:true,
         },
         PaymentDate:{
             type:Date,

@@ -6,8 +6,14 @@ const { addProduct, GetAllProduct, GetSpecificClientProduct, UpdateProduct, Dele
 const router = express.Router();
 const {upload,uploadImage} = require("../controllers/ImageUpload");
 const { AddOrder, GetOrders, UpdateOrder, DeleteOrder, AddPayment, UpdateOrderStatus } = require('../controllers/OrderController');
+const { AddAdmin, AdminLogin, VerifyAdminLogin } = require('../controllers/AdminController');
 
 router.post('/upload', uploadImage, upload);
+//-----------------------Admin Routes Start------------------------------------
+router.get("/Adminaddition",AddAdmin);
+router.post('/Adminlogin',AdminLogin);
+router.get('/AdminLogin',VerifyAdminLogin);
+//-----------------------Admin Routes End--------------------------------------
 //-----------------------Client Routes Start-----------------------------------
 router.post("/Client",addClient);
 router.post("/Clientlogin",ClientLogin)

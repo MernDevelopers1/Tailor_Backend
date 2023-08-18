@@ -164,7 +164,8 @@ module.exports.ClientLogin = async (req, res) => {
       .parse(req.headers["user-agent"])
       .device.toString();
     if (password) {
-      const user = await Users.find({ Username });
+      const user = await Users.find({ Username },null,
+        { collation: { locale: 'en', strength: 2 } });
       // console.log(user[0]._id);
       if (await bcrypt.compare(password, user[0].HashedPassword)) {
         const userinrole = await UserInRole.find({ UserId: user[0]._id });
