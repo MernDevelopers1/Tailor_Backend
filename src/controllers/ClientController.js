@@ -166,6 +166,7 @@ module.exports.ClientLogin = async (req, res) => {
     if (password) {
       const user = await Users.find({ Username },null,
         { collation: { locale: 'en', strength: 2 } });
+        if(user.length !==0){
       // console.log(user[0]._id);
       if (await bcrypt.compare(password, user[0].HashedPassword)) {
         const userinrole = await UserInRole.find({ UserId: user[0]._id });
@@ -184,6 +185,9 @@ module.exports.ClientLogin = async (req, res) => {
       } else {
         res.status(403).send("invalid credentials!");
       }
+    }else{
+      res.status(401).send({message:"invalid credintials!"})
+    }
     } else {
       res.status(403).send("invalid credentials!");
     }
