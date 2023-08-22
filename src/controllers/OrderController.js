@@ -54,6 +54,7 @@ module.exports.AddOrder = async (req, res) => {
       item.OrderId = orderdata._id;
     });
     const orderitemobj = await OrderItem.insertMany(OrderItems);
+    let paymentdata = null;
     if(PaymentAmount){
 
       const paymentobj = new OrderPayment({
@@ -61,7 +62,7 @@ module.exports.AddOrder = async (req, res) => {
         PaymentAmount,
         AdditionalComments: PAdditionalComment,
       });
-      const paymentdata = await paymentobj.save();
+     paymentdata = await paymentobj.save();
     }
     orderdata = orderdata.toObject();
     orderdata = {
@@ -275,14 +276,18 @@ module.exports.UpdateOrderStatus = async (req,res) =>{
   try{
     const {_id,Status,ItemStatus}= req.body;
     if(Status){
+
+      const CompletedAt = Status==="Completed"? new Date():undefined
       const updatestatus = await Order.findOneAndUpdate({_id},{
-        $set:{Status}
+        $set:{Status,CompletedAt}
       },{new:true});
+      console.log(updatestatus)
       res.status(200).send(updatestatus);
       
     }else if(ItemStatus){
+      const CompletedAt = ItemStatus==="Completed"? new Date():undefined
       const updatestatus = await OrderItem.findOneAndUpdate({OrderId:_id},{
-        $set:{ItemStatus}
+        $set:{ItemStatus,CompletedAt}
       },{new:true});
       console.log(updatestatus);
       res.status(200).send(updatestatus);

@@ -380,7 +380,7 @@ const orderItem = mongoose.Schema({
         required:true,
     },
    CompletedAt:{
-    type:String,
+    type:Date,
     default:null
    },
    AdditionalComments:{
