@@ -55,20 +55,19 @@ module.exports.AddOrder = async (req, res) => {
     });
     const orderitemobj = await OrderItem.insertMany(OrderItems);
     let paymentdata = null;
-    if(PaymentAmount){
-
+    if (PaymentAmount) {
       const paymentobj = new OrderPayment({
         OrderId: orderdata._id,
         PaymentAmount,
         AdditionalComments: PAdditionalComment,
       });
-     paymentdata = await paymentobj.save();
+      paymentdata = await paymentobj.save();
     }
     orderdata = orderdata.toObject();
     orderdata = {
       ...orderdata,
       OrderItems: [...orderitemobj],
-     PaymentHistory:[paymentdata?paymentdata:null]
+      PaymentHistory: [paymentdata ? paymentdata : null],
     };
     console.log(orderdata);
     res.status(200).send(orderdata);
@@ -81,10 +80,11 @@ module.exports.GetOrders = async (req, res) => {
   // console.log(req.params);
   try {
     const { ClId, StoreId } = req.params;
-   
-    if (StoreId!=="null" ) {
-        
-      const orderdata = await Order.find({ ShopId: StoreId }).sort({ OrderPlacedDate: -1 });
+
+    if (StoreId !== "null") {
+      const orderdata = await Order.find({ ShopId: StoreId }).sort({
+        OrderPlacedDate: -1,
+      });
       const orderIds = orderdata.map((obj) => obj._id);
       // console.log(orderIds);
       const orderitemdata = await OrderItem.find({
@@ -112,36 +112,37 @@ module.exports.GetOrders = async (req, res) => {
         return newOrderData;
       });
       res.status(200).send(data);
-    }else if(ClId){
-        const orderdata = await Order.find({ ClientId: ClId }).sort({ OrderPlacedDate: -1 });
-        const orderIds = orderdata.map((obj) => obj._id);
-        // console.log(orderIds);
-        const orderitemdata = await OrderItem.find({
-          OrderId: { $in: orderIds },
-        })
-        const orderPaymentdata = await OrderPayment.find({
-          OrderId: { $in: orderIds },
-        });
-        const data = orderdata.map((order) => {
-          // console.log(orderitemdata);
-          const tempOI = orderitemdata.filter((item) =>
-            item.OrderId.equals(order._id)
-          );
-          const tempOP = orderPaymentdata.filter((item) =>
-            item.OrderId.equals(order._id)
-          );
-          // console.log(tempOI);
-          // orderdata = orderdata.toObject();
-          const newOrderData = {
-            ...order.toObject(), // Convert Mongoose document to plain object
-            OrderItems: [...tempOI],
-            PaymentHistory: [...tempOP],
-          };
-  
-          return newOrderData;
-        });
-        res.status(200).send(data);
+    } else if (ClId) {
+      const orderdata = await Order.find({ ClientId: ClId }).sort({
+        OrderPlacedDate: -1,
+      });
+      const orderIds = orderdata.map((obj) => obj._id);
+      // console.log(orderIds);
+      const orderitemdata = await OrderItem.find({
+        OrderId: { $in: orderIds },
+      });
+      const orderPaymentdata = await OrderPayment.find({
+        OrderId: { $in: orderIds },
+      });
+      const data = orderdata.map((order) => {
+        // console.log(orderitemdata);
+        const tempOI = orderitemdata.filter((item) =>
+          item.OrderId.equals(order._id)
+        );
+        const tempOP = orderPaymentdata.filter((item) =>
+          item.OrderId.equals(order._id)
+        );
+        // console.log(tempOI);
+        // orderdata = orderdata.toObject();
+        const newOrderData = {
+          ...order.toObject(), // Convert Mongoose document to plain object
+          OrderItems: [...tempOI],
+          PaymentHistory: [...tempOP],
+        };
 
+        return newOrderData;
+      });
+      res.status(200).send(data);
     }
   } catch (e) {
     console.log(e);
@@ -246,12 +247,10 @@ module.exports.DeleteOrder = async (req, res) => {
     const itemdelete = await OrderItem.deleteMany({ OrderId: _id });
 
     orderdelete = orderdelete.toObject();
-    orderdelete.
-    orderdelete = {
+    orderdelete.orderdelete = {
       ...orderdelete,
-      OrderItemsdelete : itemdelete,
-      paymentdelete:paymentdelete,
-      
+      OrderItemsdelete: itemdelete,
+      paymentdelete: paymentdelete,
     };
     console.log(orderdelete);
     res.status(200).send(orderdelete);
@@ -260,42 +259,61 @@ module.exports.DeleteOrder = async (req, res) => {
     res.status(500).send(e);
   }
 };
-module.exports.AddPayment = async (req,res) => {
-  try{
-
-    const {OrderId,PaymentAmount,AdditionalComments} = req.body;
-    const addpayment = new OrderPayment({OrderId,PaymentAmount,AdditionalComments});
+module.exports.AddPayment = async (req, res) => {
+  try {
+    const { OrderId, PaymentAmount, AdditionalComments } = req.body;
+    const addpayment = new OrderPayment({
+      OrderId,
+      PaymentAmount,
+      AdditionalComments,
+    });
     const result = await addpayment.save();
     res.status(200).send(result);
-  }catch(e){
+  } catch (e) {
     console.log(e);
     res.status(500).send(e);
   }
-}
-module.exports.UpdateOrderStatus = async (req,res) =>{
-  try{
-    const {_id,Status,ItemStatus}= req.body;
-    if(Status){
-
-      const CompletedAt = Status==="Completed"? new Date():undefined
-      const updatestatus = await Order.findOneAndUpdate({_id},{
-        $set:{Status,CompletedAt}
-      },{new:true});
-      console.log(updatestatus)
-      res.status(200).send(updatestatus);
-      
-    }else if(ItemStatus){
-      const CompletedAt = ItemStatus==="Completed"? new Date():undefined
-      const updatestatus = await OrderItem.findOneAndUpdate({OrderId:_id},{
-        $set:{ItemStatus,CompletedAt}
-      },{new:true});
+};
+module.exports.UpdateOrderStatus = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { _id, Status, ItemStatus, id, paymentinfo } = req.body;
+    if (Status) {
+      let result = undefined;
+      if (paymentinfo) {
+        const OrderId = _id;
+        const { PaymentAmount, AdditionalComments } = paymentinfo;
+        const addpayment = new OrderPayment({
+          OrderId,
+          PaymentAmount,
+          AdditionalComments,
+        });
+        result = await addpayment.save();
+      }
+      const CompletedAt = Status === "Completed" ? new Date() : null;
+      const updatestatus = await Order.findOneAndUpdate(
+        { _id },
+        {
+          $set: { Status, CompletedAt },
+        },
+        { new: true }
+      );
+      // console.log(updatestatus);
+      res.status(200).send({ updatestatus, result });
+    } else if (ItemStatus) {
+      const CompletedAt = ItemStatus === "Completed" ? new Date() : null;
+      const updatestatus = await OrderItem.findOneAndUpdate(
+        { OrderId: _id, _id: id },
+        {
+          $set: { ItemStatus, CompletedAt },
+        },
+        { new: true }
+      );
       console.log(updatestatus);
       res.status(200).send(updatestatus);
-
     }
-
-  }catch(e){
+  } catch (e) {
     console.log(e);
     res.status(500).send(e);
   }
-}
+};
