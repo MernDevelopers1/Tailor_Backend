@@ -206,11 +206,14 @@ module.exports.UpdateOrder = async (req, res) => {
       },
       { new: true }
     );
-    const paymentdata = await OrderPayment.findOneAndUpdate(
-      { OrderId: _id },
-      { $set: { PaymentAmount, PAdditionalComment } },
-      { new: true }
-    );
+    let paymentdata = undefined;
+    if (PaymentAmount) {
+      paymentdata = await OrderPayment.findOneAndUpdate(
+        { OrderId: _id },
+        { $set: { PaymentAmount, PAdditionalComment } },
+        { new: true }
+      );
+    }
     const OrderItemsdata = await Promise.all(
       OrderItems.map(async (Element) => {
         const id = Element._id;
@@ -227,8 +230,7 @@ module.exports.UpdateOrder = async (req, res) => {
     orderdata.OrderItems = [...OrderItemsdata];
     orderdata = {
       ...orderdata,
-      PaymentAmount: paymentdata.PaymentAmount,
-      PAdditionalComment: paymentdata.AdditionalComment,
+      PaymentHistory: [paymentdata],
     };
     console.log(orderdata);
     res.status(200).send(orderdata);

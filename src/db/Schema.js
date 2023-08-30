@@ -253,6 +253,10 @@ const productType = mongoose.Schema({
     type: Array,
     required: true,
   },
+  TypeId: {
+    type: String,
+    required: true,
+  },
 });
 const clientProductType = mongoose.Schema({
   Client_id: {
