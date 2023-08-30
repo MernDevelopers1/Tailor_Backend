@@ -92,10 +92,9 @@ module.exports.AddMoreAtt = async (req, res) => {
     const { _id } = req.params;
     const updatedProd = await ClientProductType.findByIdAndUpdate(
       { _id },
-      { $push: { MeasurmentAttribute: AttVal } },
+      { $push: { MeasurmentAttribute: { $each: AttVal } } },
       { new: true }
     );
-    console.log(updatedProd);
     res.status(200).send(updatedProd);
   } catch (e) {
     console.log(e);
