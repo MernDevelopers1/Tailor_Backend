@@ -126,13 +126,28 @@ module.exports.StoreLogin = async (req, res) => {
           });
           res.status(200).send({ token });
         } else {
-          res.status(401).json({ message: "invalid credentials!" });
+          res
+            .status(401)
+            .json({
+              message:
+                "The username or password you entered is incorrect. Please try again.",
+            });
         }
       } else {
-        res.status(401).json({ message: "invalid credentials!" });
+        res
+          .status(401)
+          .json({
+            message:
+              "The username or password you entered is incorrect. Please try again.",
+          });
       }
     } else {
-      res.status(401).json({ message: "invalid credentials!" });
+      res
+        .status(401)
+        .json({
+          message:
+            "The username or password you entered is incorrect. Please try again.",
+        });
     }
   } catch (e) {
     console.log(e);

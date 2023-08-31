@@ -55,16 +55,36 @@ module.exports.AdminLogin = async (req, res) => {
             );
             res.status(200).send({ message: "Logged In!", token });
           } else {
-            res.status(403).json({ message: "invalid credentials!" });
+            res
+              .status(403)
+              .json({
+                message:
+                  "The username or password you entered is incorrect. Please try again.",
+              });
           }
         } else {
-          res.status(401).json({ message: "invalid credentials!" });
+          res
+            .status(401)
+            .json({
+              message:
+                "The username or password you entered is incorrect. Please try again.",
+            });
         }
       } else {
-        res.status(401).json({ message: "invalid credentials!" });
+        res
+          .status(401)
+          .json({
+            message:
+              "The username or password you entered is incorrect. Please try again.",
+          });
       }
     } else {
-      res.status(401).json({ message: "invalid credentials!" });
+      res
+        .status(401)
+        .json({
+          message:
+            "The username or password you entered is incorrect. Please try again.",
+        });
     }
   } catch (e) {
     console.log(e);
@@ -80,9 +100,11 @@ module.exports.VerifyAdminLogin = async (req, res) => {
     const { _id } = jwt.verify(token, process.env.Token_key);
     // console.log(_id);
     if (_id) {
-      res.status(200).send({message:"Logged In!"});
+      res.status(200).send({ message: "Logged In!" });
     } else {
-      res.status(403).json({ message: "Token is not Valid!" });
+      res
+        .status(403)
+        .json({ message: "Token is not Valid! (plzz Login Again.)" });
     }
     // console.log(data);
   } catch (e) {

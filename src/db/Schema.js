@@ -359,7 +359,7 @@ const order = mongoose.Schema(
     },
     AdditionalComments: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   {
@@ -410,7 +410,7 @@ const orderItem = mongoose.Schema(
     },
     AdditionalComments: {
       type: String,
-      required: true,
+      // required: true,
     },
     ExpectedCompletionDate: {
       type: Date,

@@ -109,9 +109,7 @@ module.exports.UpdateClient = async (req, res) => {
   try {
     const {
       _id,
-      Username,
-      LastLoginFromIp,
-      LastLoginAt,
+      Password,
       BusinessName,
       BusinessEmail,
       BusinessPhone,
@@ -128,43 +126,55 @@ module.exports.UpdateClient = async (req, res) => {
       UserID,
     } = req.body;
 
-    // console.log(req.body);
-    const updateClient = await Client.findByIdAndUpdate(_id, {
-      $set: {
-        BusinessName,
-        BusinessEmail,
-        BusinessPhone,
-        BusinessAddress,
-        City,
-        State,
-        Zip,
-        Country,
-        PrimaryContactName,
-        PrimaryContactEmail,
-        PrimaryContactPhone,
-        LogoUrl,
-        CoverPhotoUrl,
-      },
-    });
-    // res.status(200).json(updateClient);
-    const updateUsername = await Users.findByIdAndUpdate(
-      { _id: updateClient.UserID },
+    let HashedPassword = undefined;
+    let updateUsername = undefined;
+    if (Password) {
+      HashedPassword = await bcrypt.hash(Password, 10);
+      updateUsername = await Users.findByIdAndUpdate(
+        { _id: UserID },
+        {
+          $set: {
+            HashedPassword,
+          },
+        },
+        { new: true }
+      );
+    } else {
+      updateUsername = await Users.findById({ _id: UserID });
+    }
+    const updateClient = await Client.findByIdAndUpdate(
+      _id,
       {
         $set: {
-          LastLoginFromIp,
-          LastLoginAt,
-          Username,
+          BusinessName,
+          BusinessEmail,
+          BusinessPhone,
+          BusinessAddress,
+          City,
+          State,
+          Zip,
+          Country,
+          PrimaryContactName,
+          PrimaryContactEmail,
+          PrimaryContactPhone,
+          LogoUrl,
+          CoverPhotoUrl,
         },
-      }
+      },
+      { new: true }
     );
-    res.status(200).json({ updateClient, Username: updateUsername.Username });
+    const Clientdata = updateClient.toObject();
+
+    res.status(200).json({
+      ...Clientdata,
+      UserID: { _id: updateUsername._id, Username: updateUsername.Username },
+    });
   } catch (e) {
     res.status(500).json(e);
   }
 };
 module.exports.DeleteClient = async (req, res) => {
   try {
-    // res.status(200).json(req.params);
     const { _id } = req.params;
     const id = new mongoose.Types.ObjectId(_id);
     const DeleteClient = await Client.findByIdAndRemove({ _id });
@@ -190,10 +200,8 @@ module.exports.ClientLogin = async (req, res) => {
         collation: { locale: "en", strength: 2 },
       });
       if (user.length !== 0) {
-        // console.log(user[0]._id);
         if (await bcrypt.compare(password, user[0].HashedPassword)) {
           const userinrole = await UserInRole.find({ UserId: user[0]._id });
-          // console.log(userinrole);
           if (Role === userinrole[0].RoleId) {
             const data = await Client.find({ UserID: user[0]._id });
             if (data[0].IsActive) {
@@ -217,16 +225,28 @@ module.exports.ClientLogin = async (req, res) => {
               });
             }
           } else {
-            res.status(403).send({ message: "invalid credentials!" });
+            res.status(403).send({
+              message:
+                "The username or password you entered is incorrect. Please try again.",
+            });
           }
         } else {
-          res.status(403).send({message:"invalid credentials!"});
+          res.status(403).send({
+            message:
+              "The username or password you entered is incorrect. Please try again.",
+          });
         }
       } else {
-        res.status(401).send({ message: "invalid credintials!" });
+        res.status(401).send({
+          message:
+            "The username or password you entered is incorrect. Please try again.",
+        });
       }
     } else {
-      res.status(403).send({ message: "invalid credentials!" });
+      res.status(403).send({
+        message:
+          "The username or password you entered is incorrect. Please try again.",
+      });
     }
   } catch (e) {
     console.log(e);
@@ -235,14 +255,9 @@ module.exports.ClientLogin = async (req, res) => {
 };
 module.exports.Getloginclient = async (req, res) => {
   try {
-    // console.log(req.query);
     const { token } = req.query;
-    // console.log(token);
-    // console.log(process.env.Token_key);
     const { _id } = jwt.verify(token, process.env.Token_key);
-    // console.log(_id);
     const data = await Client.findById({ _id });
-    // console.log(data);
     res.status(200).send(data);
   } catch (e) {
     console.log(e);
