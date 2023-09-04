@@ -10,6 +10,8 @@ const {
 const useragent = require("useragent");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 
 module.exports.addClient = async (req, res) => {
   try {
@@ -33,8 +35,8 @@ module.exports.addClient = async (req, res) => {
     const LastLoginAt = useragent
       .parse(req.headers["user-agent"])
       .device.toString();
-    const LogoUrl = "images/DefaultLogo.png";
-    const CoverPhotoUrl = "images/DefaultCover.png";
+    const LogoUrl = "public/images/DefaultLogo.png";
+    const CoverPhotoUrl = "public/images/DefaultCover.png";
     if (Password) {
       const AllProduct = await ProductType.find();
       const HashedPassword = await bcrypt.hash(Password, 10);
@@ -280,5 +282,56 @@ module.exports.ChangeActiveStatus = async (req, res) => {
     res.status(200).send(data);
   } catch (e) {
     res.status(500).send(e);
+  }
+};
+module.exports.ChangeProfile = async (req, res) => {
+  // console.log(req.params);
+  // console.log(req.file);
+  try {
+    const { _id } = req.params;
+    const { path: Imagepath } = req.file;
+    const old = await Client.findById({ _id });
+    if (old.LogoUrl !== Imagepath) {
+      if (old.LogoUrl.includes("public")) {
+        const filepath = path.join(__dirname, `../../${old.LogoUrl}`);
+        // console.log(filepath);
+        fs.unlink(filepath, (err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send(err);
+          } else {
+            console.log(`File ${old.LogoUrl} has been deleted.`);
+          }
+        });
+      } else {
+        const filepath = path.join(__dirname, `../../public/${old.LogoUrl}`);
+        // console.log(filepath);
+        fs.unlink(filepath, (err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send(err);
+          } else {
+            console.log(`File ${old.LogoUrl} has been deleted.`);
+          }
+        });
+      }
+    }
+    const newdata = await Client.findByIdAndUpdate(
+      { _id },
+      {
+        $set: { LogoUrl: Imagepath },
+      },
+      { new: true }
+    );
+    const Userdata = await Users.findById({ _id: newdata.UserID });
+    let data = newdata.toObject();
+    data = {
+      ...data,
+      UserID: { _id: Userdata._id, Username: Userdata.Username },
+    };
+    res.status(200).send(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
   }
 };
