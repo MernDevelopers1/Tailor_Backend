@@ -196,6 +196,7 @@ const customers = mongoose.Schema(
     },
     FullName: {
       type: String,
+      required: true,
     },
     Phone1: {
       type: String,
@@ -206,28 +207,46 @@ const customers = mongoose.Schema(
     },
     Email: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
+      sparse: true,
+      validate: {
+        validator: function (value) {
+          console.log(value);
+          if (value === null || value === "null" || value === undefined) {
+            console.log("True");
+            return true;
+          }
+          return this.constructor
+            .findOne({ Email: value })
+            .then((existingDoc) => {
+              console.log(existingDoc);
+              return !existingDoc;
+            });
+        },
+        message: "This value is not unique.",
+      },
     },
+
     Address: {
       type: String,
-      required: true,
+      // required: true,
     },
     City: {
       type: String,
-      required: true,
+      // required: true,
     },
     State: {
       type: String,
-      required: true,
+      // required: true,
     },
     Zip: {
       type: String,
-      required: true,
+      // required: true,
     },
     Country: {
       type: String,
-      required: true,
+      // required: true,
     },
     IsActive: {
       type: Boolean,
@@ -239,7 +258,6 @@ const customers = mongoose.Schema(
     timestamps: true,
   }
 );
-customers.plugin(uniqueValidator);
 const productType = mongoose.Schema({
   Title: {
     type: String,
