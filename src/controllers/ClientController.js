@@ -335,3 +335,49 @@ module.exports.ChangeProfile = async (req, res) => {
     res.status(500).json(e);
   }
 };
+module.exports.ChangeCover = async (req, res) => {
+  // console.log(req.params);
+  // console.log(req.file);
+  try {
+    const { _id } = req.params;
+    let { path: Imagepath } = req.file;
+    const old = await Client.findById({ _id });
+    if (old.CoverPhotoUrl !== Imagepath) {
+      if (old.CoverPhotoUrl.includes("public")) {
+        const filepath = path.join(
+          __dirname,
+          `../../${old.CoverPhotoUrl.includes("public") ? "" : "public/"}${
+            old.CoverPhotoUrl
+          }`
+        );
+        // console.log(filepath);
+        fs.unlink(filepath, (err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send(err);
+          } else {
+            console.log(`File ${old.CoverPhotoUrl} has been deleted.`);
+          }
+        });
+      }
+    }
+    Imagepath = Imagepath.replace("images\\", "images/");
+    const newdata = await Client.findByIdAndUpdate(
+      { _id },
+      {
+        $set: { CoverPhotoUrl: Imagepath },
+      },
+      { new: true }
+    );
+    const Userdata = await Users.findById({ _id: newdata.UserID });
+    let data = newdata.toObject();
+    data = {
+      ...data,
+      UserID: { _id: Userdata._id, Username: Userdata.Username },
+    };
+    res.status(200).send(data);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e);
+  }
+};

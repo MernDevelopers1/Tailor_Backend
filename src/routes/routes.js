@@ -9,6 +9,7 @@ const {
   Getloginclient,
   ChangeActiveStatus,
   ChangeProfile,
+  ChangeCover,
 } = require("../controllers/ClientController");
 const {
   addStore,
@@ -69,7 +70,8 @@ router.get("/Client", getAllClient);
 router.get("/Client/:_id", getClient);
 router.patch("/Client", UpdateClient);
 router.patch("/Client/:_id", ChangeActiveStatus);
-router.patch("/Clientprofile/:_id",uploadImage,ChangeProfile)
+router.patch("/Clientprofile/:_id", uploadImage, ChangeProfile);
+router.patch("/Clientcover/:_id", uploadImage, ChangeCover);
 router.delete("/Client/:_id", DeleteClient);
 //-----------------------Client Routes End-------------------------------------
 //=======================Store Routes Start====================================
