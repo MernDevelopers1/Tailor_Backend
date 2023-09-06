@@ -45,7 +45,13 @@ module.exports.addStore = async (req, res) => {
 module.exports.getAllStores = async (req, res) => {
   try {
     const allStore = await ClientShops.find();
-    res.status(200).send(allStore);
+    const data = allStore.map((item) => {
+      const temp = item.toObject();
+      delete temp.Password;
+      console.log(temp.password);
+      return temp;
+    });
+    res.status(200).send(data);
   } catch (e) {
     res.status(500).send(e);
   }
@@ -58,8 +64,13 @@ module.exports.getSpecificClientStores = async (req, res) => {
     const id = new mongoose.Types.ObjectId(_id);
 
     const Stores = await ClientShops.find({ ClientId: _id });
+    const data = Stores.map((item) => {
+      const temp = item.toObject();
+      delete temp.Password;
+      return temp;
+    });
     // console.log(Stores);
-    res.status(200).send(Stores);
+    res.status(200).send(data);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -126,28 +137,22 @@ module.exports.StoreLogin = async (req, res) => {
           });
           res.status(200).send({ token });
         } else {
-          res
-            .status(401)
-            .json({
-              message:
-                "The username or password you entered is incorrect. Please try again.",
-            });
-        }
-      } else {
-        res
-          .status(401)
-          .json({
+          res.status(401).json({
             message:
               "The username or password you entered is incorrect. Please try again.",
           });
-      }
-    } else {
-      res
-        .status(401)
-        .json({
+        }
+      } else {
+        res.status(401).json({
           message:
             "The username or password you entered is incorrect. Please try again.",
         });
+      }
+    } else {
+      res.status(401).json({
+        message:
+          "The username or password you entered is incorrect. Please try again.",
+      });
     }
   } catch (e) {
     console.log(e);

@@ -73,7 +73,7 @@ module.exports.addCustomer = async (req, res) => {
         res.status(200).send(Result);
       }
     } else {
-      res.status(200).send(result);
+      res.status(200).send(result[0]);
     }
   } catch (e) {
     console.log(e);
@@ -164,7 +164,7 @@ module.exports.UpdateCustomer = async (req, res) => {
           new: true,
         }
       );
-    }else{
+    } else {
       updateUsername = await Users.findById({ _id: updateCustomer.UserId });
     }
     let data = updateCustomer.toObject();

@@ -35,8 +35,8 @@ module.exports.addClient = async (req, res) => {
     const LastLoginAt = useragent
       .parse(req.headers["user-agent"])
       .device.toString();
-    const LogoUrl = "public/images/DefaultLogo.png";
-    const CoverPhotoUrl = "public/images/DefaultCover.png";
+    const LogoUrl = "public\\images/DefaultLogo.png";
+    const CoverPhotoUrl = "public\\images/DefaultCover.png";
     if (Password) {
       const AllProduct = await ProductType.find();
       const HashedPassword = await bcrypt.hash(Password, 10);
@@ -298,7 +298,7 @@ module.exports.ChangeProfile = async (req, res) => {
         fs.unlink(filepath, (err) => {
           if (err) {
             console.error(err);
-            res.status(500).send(err);
+            // res.status(500).send(err);
           } else {
             console.log(`File ${old.LogoUrl} has been deleted.`);
           }
@@ -309,7 +309,7 @@ module.exports.ChangeProfile = async (req, res) => {
         fs.unlink(filepath, (err) => {
           if (err) {
             console.error(err);
-            res.status(500).send(err);
+            // res.status(500).send(err);
           } else {
             console.log(`File ${old.LogoUrl} has been deleted.`);
           }
@@ -343,23 +343,21 @@ module.exports.ChangeCover = async (req, res) => {
     let { path: Imagepath } = req.file;
     const old = await Client.findById({ _id });
     if (old.CoverPhotoUrl !== Imagepath) {
-      if (old.CoverPhotoUrl.includes("public")) {
-        const filepath = path.join(
-          __dirname,
-          `../../${old.CoverPhotoUrl.includes("public") ? "" : "public/"}${
-            old.CoverPhotoUrl
-          }`
-        );
-        // console.log(filepath);
-        fs.unlink(filepath, (err) => {
-          if (err) {
-            console.error(err);
-            res.status(500).send(err);
-          } else {
-            console.log(`File ${old.CoverPhotoUrl} has been deleted.`);
-          }
-        });
-      }
+      const filepath = path.join(
+        __dirname,
+        `../../${old.CoverPhotoUrl.includes("public") ? "" : "public/"}${
+          old.CoverPhotoUrl
+        }`
+      );
+      // console.log(filepath);
+      fs.unlink(filepath, (err) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send(err);
+        } else {
+          console.log(`File ${old.CoverPhotoUrl} has been deleted.`);
+        }
+      });
     }
     Imagepath = Imagepath.replace("images\\", "images/");
     const newdata = await Client.findByIdAndUpdate(
