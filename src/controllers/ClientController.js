@@ -35,8 +35,8 @@ module.exports.addClient = async (req, res) => {
     const LastLoginAt = useragent
       .parse(req.headers["user-agent"])
       .device.toString();
-    const LogoUrl = "public\\images/DefaultLogo.png";
-    const CoverPhotoUrl = "public\\images/DefaultCover.png";
+    const LogoUrl = "";
+    const CoverPhotoUrl = "";
     if (Password) {
       const AllProduct = await ProductType.find();
       const HashedPassword = await bcrypt.hash(Password, 10);
@@ -291,7 +291,7 @@ module.exports.ChangeProfile = async (req, res) => {
     const { _id } = req.params;
     const { path: Imagepath } = req.file;
     const old = await Client.findById({ _id });
-    if (old.LogoUrl !== Imagepath) {
+    if (old.LogoUrl && old.LogoUrl !== "" && old.LogoUrl !== Imagepath) {
       if (old.LogoUrl.includes("public")) {
         const filepath = path.join(__dirname, `../../${old.LogoUrl}`);
         // console.log(filepath);
@@ -342,7 +342,11 @@ module.exports.ChangeCover = async (req, res) => {
     const { _id } = req.params;
     let { path: Imagepath } = req.file;
     const old = await Client.findById({ _id });
-    if (old.CoverPhotoUrl !== Imagepath) {
+    if (
+      old.CoverPhotoUrl &&
+      old.CoverPhotoUrl !== "" &&
+      old.CoverPhotoUrl !== Imagepath
+    ) {
       const filepath = path.join(
         __dirname,
         `../../${old.CoverPhotoUrl.includes("public") ? "" : "public/"}${

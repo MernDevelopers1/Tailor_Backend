@@ -55,11 +55,11 @@ const client = mongoose.Schema(
     },
     LogoUrl: {
       type: String,
-      required: true,
+      // required: true,
     },
     CoverPhotoUrl: {
       type: String,
-      required: true,
+      // required: true,
     },
     IsActive: {
       type: Boolean,
@@ -258,6 +258,7 @@ const customers = mongoose.Schema(
     timestamps: true,
   }
 );
+customers.plugin(uniqueValidator);
 const productType = mongoose.Schema({
   Title: {
     type: String,

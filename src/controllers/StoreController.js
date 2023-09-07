@@ -80,6 +80,7 @@ module.exports.UpdateStores = async (req, res) => {
   try {
     const {
       _id,
+      Password,
       ClientId,
       StoreName,
       PrimaryContactName,
@@ -91,21 +92,34 @@ module.exports.UpdateStores = async (req, res) => {
       Zip,
       Country,
     } = req.body;
-    const updatedStore = await ClientShops.findByIdAndUpdate(_id, {
-      $set: {
-        ClientId,
-        StoreName,
-        PrimaryContactName,
-        PrimaryContactPhone,
-        PrimaryContactEmail,
-        Address,
-        City,
-        State,
-        Zip,
-        Country,
+    let HashedPassword = undefined;
+    if (Password) {
+      HashedPassword = await bcrypt.hash(Password, 10);
+    }
+    const updatedStore = await ClientShops.findByIdAndUpdate(
+      _id,
+      {
+        $set: {
+          Password: HashedPassword,
+          ClientId,
+          StoreName,
+          PrimaryContactName,
+          PrimaryContactPhone,
+          PrimaryContactEmail,
+          Address,
+          City,
+          State,
+          Zip,
+          Country,
+        },
       },
-    });
-    res.status(200).json(updatedStore);
+      {
+        new: true,
+      }
+    );
+    let data = updatedStore.toObject();
+    delete data.Password;
+    res.status(200).json(data);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
