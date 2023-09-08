@@ -188,7 +188,7 @@ module.exports.DeleteCustomer = async (req, res) => {
     const DeleteUser = await Users.deleteOne({ _id: DeleteCustomer.UserId });
     const DeleteUserImRole = await UserInRole.deleteOne({ UserId: id });
     if (DeleteCustomer && DeleteUser && DeleteUserImRole)
-      res.status(200).json({messsage:"Deleted Successfully!!"});
+      res.status(200).json({ messsage: "Deleted Successfully!!" });
   } catch (e) {
     // console.log(e);
     res.status(500).send(e);

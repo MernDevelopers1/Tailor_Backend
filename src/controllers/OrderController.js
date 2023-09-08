@@ -81,7 +81,7 @@ module.exports.GetOrders = async (req, res) => {
   try {
     const { ClId, StoreId } = req.params;
 
-    if (StoreId !== "null") {
+    if (StoreId && StoreId !== "null") {
       const orderdata = await Order.find({ ShopId: StoreId }).sort({
         OrderPlacedDate: -1,
       });
