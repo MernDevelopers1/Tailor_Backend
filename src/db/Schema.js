@@ -338,6 +338,14 @@ const order = mongoose.Schema(
       type: String,
       required: true,
     },
+    BillingEmail: {
+      type: String,
+      required: true,
+    },
+    BillingPhone: {
+      type: String,
+      required: true,
+    },
     BillingCity: {
       type: String,
       required: true,
@@ -355,6 +363,12 @@ const order = mongoose.Schema(
       required: true,
     },
     ShippingFullName: {
+      type: String,
+    },
+    ShippingEmail: {
+      type: String,
+    },
+    ShippingPhone: {
       type: String,
     },
     ShippingAddress: {

@@ -35,8 +35,9 @@ module.exports.addStore = async (req, res) => {
       Password: HashedPassword,
     });
     const result = await addStore.save();
-    delete result.Password;
-    res.status(200).json(result);
+    let data = result.toObject();
+    delete data.Password;
+    res.status(200).json(data);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);

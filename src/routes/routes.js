@@ -25,6 +25,7 @@ const {
   getCustomer,
   UpdateCustomer,
   DeleteCustomer,
+  verifyPhone,
 } = require("../controllers/CustomerController");
 const {
   addProduct,
@@ -84,6 +85,7 @@ router.post("/storelogin", StoreLogin);
 //=======================Store Routes End======================================
 //=======================Customer Routes Start=================================
 router.post("/Customer", addCustomer);
+router.post("/CustomerP", verifyPhone);
 router.get("/Customer", getAllCustomer);
 router.get("/Customer/:_id", getCustomer);
 router.patch("/Customer", UpdateCustomer);

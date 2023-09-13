@@ -73,7 +73,10 @@ module.exports.addCustomer = async (req, res) => {
         res.status(200).send(Result);
       }
     } else {
-      res.status(200).send(result[0]);
+      const data = result[0].toObject();
+      res
+        .status(200)
+        .send({ ...data, messsage: "Phone Number Already Registred!!" });
     }
   } catch (e) {
     console.log(e);
@@ -85,6 +88,7 @@ module.exports.getAllCustomer = async (req, res) => {
     const result = await Customer.find().populate("UserId", "Username").exec();
     res.status(200).json(result);
   } catch (e) {
+    console.log(e);
     res.status(500).json(e);
   }
 };
@@ -104,6 +108,7 @@ module.exports.getCustomer = async (req, res) => {
       .exec();
     res.status(200).json(result);
   } catch (e) {
+    console.log(e);
     res.status(500).json(e);
   }
 };
@@ -190,7 +195,21 @@ module.exports.DeleteCustomer = async (req, res) => {
     if (DeleteCustomer && DeleteUser && DeleteUserImRole)
       res.status(200).json({ messsage: "Deleted Successfully!!" });
   } catch (e) {
-    // console.log(e);
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
+module.exports.verifyPhone = async (req, res) => {
+  try {
+    const { Phone1 } = req.body;
+    const result = await Customer.find({ Phone1 });
+    if (result.length) {
+      res.status(409).send({ messsage: "Already Exist!!" });
+    } else {
+      res.status(200).send({ message: "Not exist!!" });
+    }
+  } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 };
