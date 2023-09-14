@@ -267,6 +267,7 @@ module.exports.Getloginclient = async (req, res) => {
   }
 };
 module.exports.ChangeActiveStatus = async (req, res) => {
+  console.log("Called!!");
   try {
     const { _id } = req.params;
     const { IsActive } = req.body;
@@ -279,58 +280,68 @@ module.exports.ChangeActiveStatus = async (req, res) => {
     console.log(userdata);
     let data = changeStatus.toObject();
     data = { ...data, UserID: userdata[0] };
+    console.log(data);
     res.status(200).send(data);
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 };
 module.exports.ChangeProfile = async (req, res) => {
-  // console.log(req.params);
-  // console.log(req.file);
+  console.log(req.params);
+  console.log(req.file);
+  console.log(req.error);
   try {
-    const { _id } = req.params;
-    const { path: Imagepath } = req.file;
-    const old = await Client.findById({ _id });
-    if (old.LogoUrl && old.LogoUrl !== "" && old.LogoUrl !== Imagepath) {
-      if (old.LogoUrl.includes("public")) {
-        const filepath = path.join(__dirname, `../../${old.LogoUrl}`);
-        // console.log(filepath);
-        fs.unlink(filepath, (err) => {
-          if (err) {
-            console.error(err);
-            // res.status(500).send(err);
-          } else {
-            console.log(`File ${old.LogoUrl} has been deleted.`);
-          }
-        });
-      } else {
-        const filepath = path.join(__dirname, `../../public/${old.LogoUrl}`);
-        // console.log(filepath);
-        fs.unlink(filepath, (err) => {
-          if (err) {
-            console.error(err);
-            // res.status(500).send(err);
-          } else {
-            console.log(`File ${old.LogoUrl} has been deleted.`);
-          }
-        });
+    if (!req.error) {
+      const { _id } = req.params;
+      const { path: Imagepath } = req.file;
+      const old = await Client.findById({ _id });
+      if (old.LogoUrl && old.LogoUrl !== "" && old.LogoUrl !== Imagepath) {
+        if (old.LogoUrl.includes("public")) {
+          const filepath = path.join(__dirname, `../../${old.LogoUrl}`);
+          // console.log(filepath);
+          fs.unlink(filepath, (err) => {
+            if (err) {
+              console.error(err);
+              // res.status(500).send(err);
+            } else {
+              console.log(`File ${old.LogoUrl} has been deleted.`);
+            }
+          });
+        } else {
+          const filepath = path.join(__dirname, `../../public/${old.LogoUrl}`);
+          // console.log(filepath);
+          fs.unlink(filepath, (err) => {
+            if (err) {
+              console.error(err);
+              // res.status(500).send(err);
+            } else {
+              console.log(`File ${old.LogoUrl} has been deleted.`);
+            }
+          });
+        }
       }
+      const newdata = await Client.findByIdAndUpdate(
+        { _id },
+        {
+          $set: { LogoUrl: Imagepath },
+        },
+        { new: true }
+      );
+      const Userdata = await Users.findById({ _id: newdata.UserID });
+      let data = newdata.toObject();
+      data = {
+        ...data,
+        UserID: { _id: Userdata._id, Username: Userdata.Username },
+      };
+
+      res.status(200).send(data);
+    } else {
+      console.log("Called!!");
+      res.status(req.error.status || 500).send(req.error);
     }
-    const newdata = await Client.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { LogoUrl: Imagepath },
-      },
-      { new: true }
-    );
-    const Userdata = await Users.findById({ _id: newdata.UserID });
-    let data = newdata.toObject();
-    data = {
-      ...data,
-      UserID: { _id: Userdata._id, Username: Userdata.Username },
-    };
-    res.status(200).send(data);
   } catch (e) {
+    console.log("Catch Block!!");
     console.log(e);
     res.status(500).json(e);
   }
