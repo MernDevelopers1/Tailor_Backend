@@ -30,14 +30,18 @@ module.exports.GetAllDefaultProduct = async (req, res) => {
 module.exports.UpdateDefaultProduct = async (req, res) => {
   try {
     const { _id, Title, ImageUrl, MeasurmentAttribute, TypeId } = req.body;
-    const updateProduct = await ProductType.findByIdAndUpdate(_id, {
-      $set: {
-        Title,
-        ImageUrl,
-        MeasurmentAttribute,
-        TypeId,
+    const updateProduct = await ProductType.findByIdAndUpdate(
+      _id,
+      {
+        $set: {
+          Title,
+          ImageUrl,
+          MeasurmentAttribute,
+          TypeId,
+        },
       },
-    });
+      { new: true }
+    );
     res.status(200).json(updateProduct);
   } catch (e) {
     console.log(e);

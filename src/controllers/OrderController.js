@@ -239,7 +239,14 @@ module.exports.UpdateOrder = async (req, res) => {
           { $set: { ...Element } },
           { new: true }
         );
-        return itemdata;
+        if (itemdata) {
+          return itemdata;
+        } else {
+          Element.OrderId = _id;
+          const newitem = new OrderItem({ ...Element });
+          const result = await newitem.save();
+          return result;
+        }
       })
     );
     orderdata = orderdata.toObject();
