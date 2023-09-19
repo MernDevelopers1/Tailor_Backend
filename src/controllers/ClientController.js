@@ -258,7 +258,9 @@ module.exports.Getloginclient = async (req, res) => {
   try {
     const { token } = req.query;
     const { _id } = jwt.verify(token, process.env.Token_key);
-    const data = await Client.findById({ _id });
+    const data = await Client.findById({ _id })
+      .populate("UserID", "Username")
+      .exec();
     res.status(200).send(data);
   } catch (e) {
     console.log(e);
@@ -378,5 +380,39 @@ module.exports.ChangeCover = async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(500).json(e);
+  }
+};
+module.exports.ChangePassword = async (req, res) => {
+  try {
+    const { OldPassword, NewPassword } = req.body;
+    const { _id } = req.params;
+    const Userdata = await Users.findById({ _id });
+    console.log(Userdata.HashedPassword);
+    if (await bcrypt.compare(OldPassword, Userdata.HashedPassword)) {
+      const HashedPassword = await bcrypt.hash(NewPassword, 10);
+      const User =await findByIdAndUpdate(
+        { _id },
+        {
+          $set: { HashedPassword },
+        },
+        {
+          new: true,
+        }
+      );
+      if (User) {
+        res
+          .status(200)
+          .json({ message: "Password has been successfully updated" });
+      }else{
+        res
+          .status(404)
+          .json({ message: "User not found or password update failed" });
+      }
+    } else {
+      res.status(401).json({ message: "Invalid Old Password!!" });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
   }
 };
