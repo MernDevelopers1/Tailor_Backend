@@ -347,8 +347,6 @@ module.exports.ChangeProfile = async (req, res) => {
   }
 };
 module.exports.ChangeCover = async (req, res) => {
-  // console.log(req.params);
-  // console.log(req.file);
   try {
     const { _id } = req.params;
     let { path: Imagepath } = req.file;
