@@ -142,15 +142,27 @@ module.exports.StoreLogin = async (req, res) => {
     if (password) {
       const Shops = await ClientShops.find({ Username }, null, {
         collation: { locale: "en", strength: 2 },
-      });
+      })
+        .populate({
+          path: "ClientId",
+          select: "IsActive LogoUrl",
+        })
+        .exec();
       if (Shops.length !== 0) {
         if (await bcrypt.compare(password, Shops[0].Password)) {
-          const data = Shops[0].toObject();
-          delete data.Password;
-          const token = jwt.sign({ ...data }, process.env.Token_key, {
-            expiresIn: "1d",
-          });
-          res.status(200).send({ token });
+          if (Shops[0].ClientId.IsActive) {
+            const data = Shops[0].toObject();
+            delete data.Password;
+            const token = jwt.sign({ ...data }, process.env.Token_key, {
+              expiresIn: "1d",
+            });
+            res.status(200).send({ token });
+          } else {
+            res.status(403).json({
+              message:
+                "The client's account has been marked as inactive. Please reach out to the administrator for additional support or assistance.",
+            });
+          }
         } else {
           res.status(401).json({
             message:
