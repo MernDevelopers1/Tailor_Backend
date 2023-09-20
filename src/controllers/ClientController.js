@@ -204,7 +204,9 @@ module.exports.ClientLogin = async (req, res) => {
         if (await bcrypt.compare(password, user[0].HashedPassword)) {
           const userinrole = await UserInRole.find({ UserId: user[0]._id });
           if (Role === userinrole[0].RoleId) {
-            const data = await Client.find({ UserID: user[0]._id });
+            const data = await Client.find({ UserID: user[0]._id })
+              .populate("UserID", "Username")
+              .exec();
             if (data[0].IsActive) {
               await Users.findByIdAndUpdate(
                 { _id: user[0]._id },
@@ -387,10 +389,9 @@ module.exports.ChangePassword = async (req, res) => {
     const { OldPassword, NewPassword } = req.body;
     const { _id } = req.params;
     const Userdata = await Users.findById({ _id });
-    console.log(Userdata.HashedPassword);
     if (await bcrypt.compare(OldPassword, Userdata.HashedPassword)) {
       const HashedPassword = await bcrypt.hash(NewPassword, 10);
-      const User =await findByIdAndUpdate(
+      const User = await Users.findByIdAndUpdate(
         { _id },
         {
           $set: { HashedPassword },
@@ -403,7 +404,7 @@ module.exports.ChangePassword = async (req, res) => {
         res
           .status(200)
           .json({ message: "Password has been successfully updated" });
-      }else{
+      } else {
         res
           .status(404)
           .json({ message: "User not found or password update failed" });
