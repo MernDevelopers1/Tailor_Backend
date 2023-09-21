@@ -19,6 +19,7 @@ const {
   UpdateStores,
   DeleteStore,
   StoreLogin,
+  ChangeStorePassword,
 } = require("../controllers/StoreController");
 const {
   addCustomer,
@@ -82,6 +83,7 @@ router.post("/Store", addStore);
 router.get("/Store", getAllStores);
 router.get("/Store/:_id", getSpecificClientStores);
 router.patch("/Store", UpdateStores);
+router.patch("/Storepassword/:_id", ChangeStorePassword);
 router.delete("/Store/:_id", DeleteStore);
 router.post("/storelogin", StoreLogin);
 //=======================Store Routes End======================================

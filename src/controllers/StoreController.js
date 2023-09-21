@@ -92,6 +92,7 @@ module.exports.UpdateStores = async (req, res) => {
       State,
       Zip,
       Country,
+      logedin,
     } = req.body;
     let HashedPassword = undefined;
     if (Password) {
@@ -118,9 +119,24 @@ module.exports.UpdateStores = async (req, res) => {
         new: true,
       }
     );
-    let data = updatedStore.toObject();
-    delete data.Password;
-    res.status(200).json(data);
+    if (logedin) {
+      const Shops = await ClientShops.findById({ _id: updatedStore._id })
+        .populate({
+          path: "ClientId",
+          select: "IsActive LogoUrl",
+        })
+        .exec();
+      const data = Shops.toObject();
+      delete data.Password;
+      const token = jwt.sign({ ...data }, process.env.Token_key, {
+        expiresIn: "1d",
+      });
+      res.status(200).send({ token });
+    } else {
+      let data = updatedStore.toObject();
+      delete data.Password;
+      res.status(200).json(data);
+    }
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -180,6 +196,39 @@ module.exports.StoreLogin = async (req, res) => {
         message:
           "The username or password you entered is incorrect. Please try again.",
       });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
+module.exports.ChangeStorePassword = async (req, res) => {
+  try {
+    const { OldPassword, NewPassword } = req.body;
+    const { _id } = req.params;
+    const Shopdata = await ClientShops.findById({ _id });
+    if (await bcrypt.compare(OldPassword, Shopdata.Password)) {
+      const Password = await bcrypt.hash(NewPassword, 10);
+      const Shop = await ClientShops.findByIdAndUpdate(
+        { _id },
+        {
+          $set: { Password },
+        },
+        {
+          new: true,
+        }
+      );
+      if (Shop) {
+        res
+          .status(200)
+          .json({ message: "Password has been successfully updated" });
+      } else {
+        res
+          .status(404)
+          .json({ message: "Shop not found or password update failed" });
+      }
+    } else {
+      res.status(401).json({ message: "Invalid Old Password!!" });
     }
   } catch (e) {
     console.log(e);
