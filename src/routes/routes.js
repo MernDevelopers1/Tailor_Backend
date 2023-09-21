@@ -51,6 +51,7 @@ const {
   AddAdmin,
   AdminLogin,
   VerifyAdminLogin,
+  ChangeAdminPassword,
 } = require("../controllers/AdminController");
 const {
   addDefaultProduct,
@@ -64,6 +65,7 @@ router.post("/upload", uploadImage, upload);
 // router.get("/Adminaddition",AddAdmin);
 router.post("/Adminlogin", AdminLogin);
 router.get("/AdminLogin", VerifyAdminLogin);
+router.patch("/Adminpassword/:_id", ChangeAdminPassword);
 //-----------------------Admin Routes End--------------------------------------
 //-----------------------Client Routes Start-----------------------------------
 router.post("/Client", addClient);
