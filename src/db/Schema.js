@@ -186,6 +186,22 @@ const clientShops = mongoose.Schema(
     timestamps: true,
   }
 );
+const clientCustomers = mongoose.Schema({
+  ClientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Clients",
+    required: true,
+  },
+  CustomerIds: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Customer",
+      },
+    ],
+    required: true,
+  },
+});
 clientShops.plugin(uniqueValidator);
 const customers = mongoose.Schema(
   {
@@ -479,6 +495,7 @@ const orderPayment = mongoose.Schema(
   }
 );
 const Client = mongoose.model("Clients", client);
+const ClientCustomers = mongoose.model("ClientCustomer", clientCustomers);
 const Users = mongoose.model("User", users);
 const Role = mongoose.model("Role", role);
 const UserInRole = mongoose.model("UserInRole", userInRole);
@@ -504,4 +521,5 @@ module.exports = {
   OrderItem,
   OrderPayment,
   ClientProductType,
+  ClientCustomers,
 };

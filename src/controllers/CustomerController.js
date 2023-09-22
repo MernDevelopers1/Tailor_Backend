@@ -1,11 +1,18 @@
 const bcrypt = require("bcrypt");
-const { Users, Customer, UserInRole, Order } = require("../db/Schema");
+const {
+  Users,
+  Customer,
+  UserInRole,
+  Order,
+  ClientCustomers,
+} = require("../db/Schema");
 const { default: mongoose } = require("mongoose");
 const useragent = require("useragent");
 
 module.exports.addCustomer = async (req, res) => {
   try {
     let {
+      ClientId,
       Username,
       Password,
       FullName,
@@ -26,7 +33,10 @@ module.exports.addCustomer = async (req, res) => {
     const result = await Customer.find({ Phone1 })
       .populate("UserId", "Username")
       .exec();
-
+    ClientId = new mongoose.Types.ObjectId(ClientId);
+    console.log(ClientId);
+    const clientcustomer = await ClientCustomers.findOne({ ClientId });
+    console.log(clientcustomer);
     if (!result.length) {
       Password = Password || "TailorCustomer1!";
       if (!Username) {
@@ -65,6 +75,20 @@ module.exports.addCustomer = async (req, res) => {
           Country,
         });
         let Result = await CustomerData.save();
+        if (Object.keys(clientcustomer).length) {
+          await ClientCustomers.findOneAndUpdate(
+            { ClientId },
+            {
+              $push: { CustomerIds: Result._id },
+            }
+          );
+        } else {
+          const newclietcustomer = new ClientCustomers({
+            ClientId,
+            CustomerIds: [Result._id],
+          });
+          await newclietcustomer.save();
+        }
         const userInRole = new UserInRole({ UserId: Result.UserId, RoleId: 3 });
         Result = Result.toObject();
         await userInRole.save();
@@ -73,6 +97,20 @@ module.exports.addCustomer = async (req, res) => {
         res.status(200).send(Result);
       }
     } else {
+      if (Object.keys(clientcustomer).length) {
+        await ClientCustomers.findOneAndUpdate(
+          { ClientId },
+          {
+            $push: { CustomerIds: result[0]._id },
+          }
+        );
+      } else {
+        const newclietcustomer = new ClientCustomers({
+          ClientId,
+          CustomerIds: [result[0]._id],
+        });
+        await newclietcustomer.save();
+      }
       const data = result[0].toObject();
       res
         .status(200)
@@ -95,13 +133,10 @@ module.exports.getAllCustomer = async (req, res) => {
 module.exports.getCustomer = async (req, res) => {
   try {
     const { _id } = req.params;
-    const Orderdata = await Order.find({ ClientId: _id });
-    let CustomerId = [];
-    Orderdata.forEach((element) => {
-      if (!CustomerId.includes(element.CustomerId)) {
-        CustomerId.push(element.CustomerId);
-      }
+    const ClientCustomerdata = await ClientCustomers.find({
+      ClientId: _id,
     });
+    let CustomerId = [...ClientCustomerdata[0].CustomerIds];
 
     const result = await Customer.find({ _id: { $in: CustomerId } })
       .populate("UserId", "Username")
