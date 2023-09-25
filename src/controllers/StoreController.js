@@ -166,7 +166,8 @@ module.exports.StoreLogin = async (req, res) => {
         .exec();
       if (Shops.length !== 0) {
         if (await bcrypt.compare(password, Shops[0].Password)) {
-          if (Shops[0].ClientId.IsActive) {
+          console.log(Shops[0].IsActive);
+          if (Shops[0].ClientId.IsActive && Shops[0].IsActive) {
             const data = Shops[0].toObject();
             delete data.Password;
             const token = jwt.sign({ ...data }, process.env.Token_key, {
@@ -174,10 +175,15 @@ module.exports.StoreLogin = async (req, res) => {
             });
             res.status(200).send({ token });
           } else {
-            res.status(403).json({
-              message:
-                "The client's account has been marked as inactive. Please reach out to the administrator for additional support or assistance.",
-            });
+            Shops[0].ClientId.IsActive
+              ? res.status(403).json({
+                  message:
+                    "The  store has been marked as inactive. Please reach out to the Client for additional support or assistance.",
+                })
+              : res.status(403).json({
+                  message:
+                    "The client's account of that store has been marked as inactive. Please reach out to the administrator for additional support or assistance.",
+                });
           }
         } else {
           res.status(401).json({
@@ -230,6 +236,25 @@ module.exports.ChangeStorePassword = async (req, res) => {
     } else {
       res.status(401).json({ message: "Invalid Old Password!!" });
     }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
+module.exports.ChangeStoreActiveStatus = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const { IsActive } = req.body;
+    console.log(IsActive);
+    console.log(_id);
+    const changeStatus = await ClientShops.findByIdAndUpdate(
+      { _id },
+      { $set: { IsActive } },
+      { new: true }
+    );
+    let data = changeStatus.toObject();
+    console.log(data);
+    res.status(200).send(data);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
