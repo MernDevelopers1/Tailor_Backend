@@ -46,5 +46,11 @@ exports.uploadImage = (req, res, next) => {
 };
 exports.upload = (req, res) => {
   //   console.log(req.file);
-  res.status(200).send(req.file);
+  if (!req.error) {
+    res.status(200).send(req.file);
+  } else {
+    const { message, status } = req.error;
+    console.log(message);
+    res.status(status).json({ message });
+  }
 };

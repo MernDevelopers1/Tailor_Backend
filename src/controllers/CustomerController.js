@@ -33,6 +33,7 @@ module.exports.addCustomer = async (req, res) => {
     const result = await Customer.find({ Phone1 })
       .populate("UserId", "Username")
       .exec();
+    // console.log(result);
     ClientId = new mongoose.Types.ObjectId(ClientId);
     console.log(ClientId);
     const clientcustomer = await ClientCustomers.findOne({ ClientId });
@@ -75,7 +76,7 @@ module.exports.addCustomer = async (req, res) => {
           Country,
         });
         let Result = await CustomerData.save();
-        if (Object.keys(clientcustomer).length) {
+        if (clientcustomer && Object.keys(clientcustomer).length) {
           await ClientCustomers.findOneAndUpdate(
             { ClientId },
             {
@@ -97,7 +98,7 @@ module.exports.addCustomer = async (req, res) => {
         res.status(200).send(Result);
       }
     } else {
-      if (Object.keys(clientcustomer).length) {
+      if (clientcustomer && Object.keys(clientcustomer).length) {
         await ClientCustomers.findOneAndUpdate(
           { ClientId },
           {

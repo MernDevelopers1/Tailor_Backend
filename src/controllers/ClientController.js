@@ -410,7 +410,7 @@ module.exports.ChangePassword = async (req, res) => {
           .json({ message: "User not found or password update failed" });
       }
     } else {
-      res.status(401).json({ message: "Invalid Old Password!!" });
+      res.status(401).json({ message: "Old password provided is incorrect!!" });
     }
   } catch (e) {
     console.log(e);
