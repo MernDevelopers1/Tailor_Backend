@@ -191,7 +191,11 @@ module.exports.UpdateOrder = async (req, res) => {
     } = req.body;
     // console.log("comp", CompletedAt);
     CompletedAt =
-      CompletedAt === null && Status === "Completed" ? new Date() : CompletedAt;
+      CompletedAt === null && Status === "Completed"
+        ? new Date()
+        : CompletedAt !== null && Status !== "Completed"
+        ? null
+        : CompletedAt;
     let orderdata = await Order.findByIdAndUpdate(
       { _id },
       {
@@ -244,6 +248,8 @@ module.exports.UpdateOrder = async (req, res) => {
         Element.CompletedAt =
           Element.CompletedAt === null && Element.ItemStatus === "Completed"
             ? new Date()
+            : Element.CompletedAt !== null && Element.ItemStatus !== "Completed"
+            ? null
             : Element.CompletedAt;
         const id = Element._id;
         delete Element._id;
