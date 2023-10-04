@@ -159,7 +159,7 @@ module.exports.GetOrders = async (req, res) => {
 };
 module.exports.UpdateOrder = async (req, res) => {
   try {
-    const {
+    let {
       _id,
       ClientId,
       CustomerId,
@@ -189,7 +189,9 @@ module.exports.UpdateOrder = async (req, res) => {
       PaymentAmount,
       PAdditionalComment,
     } = req.body;
-
+    // console.log("comp", CompletedAt);
+    CompletedAt =
+      CompletedAt === null && Status === "Completed" ? new Date() : CompletedAt;
     let orderdata = await Order.findByIdAndUpdate(
       { _id },
       {
@@ -222,16 +224,27 @@ module.exports.UpdateOrder = async (req, res) => {
       },
       { new: true }
     );
-    let paymentdata = undefined;
+    let paymentdata = null;
     if (PaymentAmount) {
-      paymentdata = await OrderPayment.findOneAndUpdate(
-        { OrderId: _id },
-        { $set: { PaymentAmount, PAdditionalComment } },
-        { new: true }
-      );
+      const paymentobj = new OrderPayment({
+        OrderId: _id,
+        PaymentAmount,
+        AdditionalComments: PAdditionalComment,
+      });
+      paymentdata = await paymentobj.save();
+      // paymentdata = await OrderPayment.findOneAndUpdate(
+      //   { OrderId: _id },
+      //   { $set: { PaymentAmount, PAdditionalComment } },
+      //   { new: true }
+      // );
     }
+    paymentdata = await OrderPayment.find({ OrderId: _id });
     const OrderItemsdata = await Promise.all(
       OrderItems.map(async (Element) => {
+        Element.CompletedAt =
+          Element.CompletedAt === null && Element.ItemStatus === "Completed"
+            ? new Date()
+            : Element.CompletedAt;
         const id = Element._id;
         delete Element._id;
         const itemdata = await OrderItem.findOneAndUpdate(
@@ -253,9 +266,8 @@ module.exports.UpdateOrder = async (req, res) => {
     orderdata.OrderItems = [...OrderItemsdata];
     orderdata = {
       ...orderdata,
-      PaymentHistory: [paymentdata],
+      PaymentHistory: [...paymentdata],
     };
-    console.log(orderdata);
     res.status(200).send(orderdata);
   } catch (e) {
     console.log(e);
