@@ -11,6 +11,7 @@ const {
   ChangeProfile,
   ChangeCover,
   ChangePassword,
+  UniqueCheck,
 } = require("../controllers/ClientController");
 const {
   addStore,
@@ -21,6 +22,7 @@ const {
   StoreLogin,
   ChangeStorePassword,
   ChangeStoreActiveStatus,
+  CheckUniqueStore,
 } = require("../controllers/StoreController");
 const {
   addCustomer,
@@ -63,12 +65,13 @@ const {
 
 router.post("/upload", uploadImage, upload);
 //-----------------------Admin Routes Start------------------------------------
-// router.get("/Adminaddition",AddAdmin);
+router.get("/Adminaddition", AddAdmin);
 router.post("/Adminlogin", AdminLogin);
 router.get("/AdminLogin", VerifyAdminLogin);
 router.patch("/Adminpassword/:_id", ChangeAdminPassword);
 //-----------------------Admin Routes End--------------------------------------
 //-----------------------Client Routes Start-----------------------------------
+router.post("/ClientUnique", UniqueCheck);
 router.post("/Client", addClient);
 router.post("/Clientlogin", ClientLogin);
 router.get("/Clientlogin", Getloginclient);
@@ -82,6 +85,7 @@ router.patch("/Clientpassword/:_id", ChangePassword);
 router.delete("/Client/:_id", DeleteClient);
 //-----------------------Client Routes End-------------------------------------
 //=======================Store Routes Start====================================
+router.post("/StoreUnique", CheckUniqueStore);
 router.post("/Store", addStore);
 router.get("/Store", getAllStores);
 router.get("/Store/:_id", getSpecificClientStores);

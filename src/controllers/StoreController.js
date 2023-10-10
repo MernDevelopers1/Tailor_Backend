@@ -3,6 +3,31 @@ const { ClientShops } = require("../db/Schema");
 const jwt = require("jsonwebtoken");
 
 const bcrypt = require("bcrypt");
+module.exports.CheckUniqueStore = async (req, res) => {
+  try {
+    const { name, value } = req.body;
+    if (name === "Username") {
+      const Username = await ClientShops.find({ Username: value });
+      if (Username.length) {
+        console.log(name);
+
+        res.status(409).json({ message: "Already Exist!" });
+      } else {
+        res.sendStatus(200);
+      }
+    } else {
+      const Email = await ClientShops.find({ [name]: value });
+      if (Email.length) {
+        res.status(409).json({ message: "Already Exist!" });
+      } else {
+        res.sendStatus(200);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e);
+  }
+};
 module.exports.addStore = async (req, res) => {
   try {
     const {
@@ -19,25 +44,38 @@ module.exports.addStore = async (req, res) => {
       Username,
       Password,
     } = req.body;
-    const HashedPassword = await bcrypt.hash(Password, 10);
-    const addStore = new ClientShops({
-      ClientId,
-      StoreName,
-      PrimaryContactName,
-      PrimaryContactPhone,
-      PrimaryContactEmail,
-      Address,
-      City,
-      State,
-      Zip,
-      Country,
-      Username,
-      Password: HashedPassword,
+    const UsernameCheck = await ClientShops.find({
+      $or: [{ Username }, { PrimaryContactEmail }],
     });
-    const result = await addStore.save();
-    let data = result.toObject();
-    delete data.Password;
-    res.status(200).json(data);
+    if (!UsernameCheck.length) {
+      const HashedPassword = await bcrypt.hash(Password, 10);
+      const addStore = new ClientShops({
+        ClientId,
+        StoreName,
+        PrimaryContactName,
+        PrimaryContactPhone,
+        PrimaryContactEmail,
+        Address,
+        City,
+        State,
+        Zip,
+        Country,
+        Username,
+        Password: HashedPassword,
+      });
+      const result = await addStore.save();
+      let data = result.toObject();
+      delete data.Password;
+      res.status(200).json(data);
+    } else {
+      if (UsernameCheck[0].Username === Username) {
+        res.status(409).json({ message: "Username Already Exist!!" });
+      } else {
+        res
+          .status(409)
+          .json({ message: "Primary Contact Email Already Exist!!" });
+      }
+    }
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -156,9 +194,7 @@ module.exports.StoreLogin = async (req, res) => {
   try {
     const { Username, password } = req.body;
     if (password) {
-      const Shops = await ClientShops.find({ Username }, null, {
-        collation: { locale: "en", strength: 2 },
-      })
+      const Shops = await ClientShops.find({ Username })
         .populate({
           path: "ClientId",
           select: "IsActive LogoUrl",

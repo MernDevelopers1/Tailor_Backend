@@ -12,6 +12,31 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
+module.exports.UniqueCheck = async (req, res) => {
+  try {
+    const { name, value } = req.body;
+    if (name === "Username") {
+      const Username = await Users.find({ Username: value });
+      if (Username.length) {
+        console.log(name);
+
+        res.status(409).json({ message: "Already Exist!" });
+      } else {
+        res.sendStatus(200);
+      }
+    } else {
+      const Email = await Client.find({ [name]: value });
+      if (Email.length) {
+        res.status(409).json({ message: "Already Exist!" });
+      } else {
+        res.sendStatus(200);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e);
+  }
+};
 
 module.exports.addClient = async (req, res) => {
   try {
@@ -37,50 +62,73 @@ module.exports.addClient = async (req, res) => {
       .device.toString();
     const LogoUrl = "";
     const CoverPhotoUrl = "";
-    if (Password) {
-      const AllProduct = await ProductType.find();
-      const HashedPassword = await bcrypt.hash(Password, 10);
-      const userdata = new Users({
-        Username,
-        HashedPassword,
-        LastLoginFromIp,
-        LastLoginAt,
+    const UsernameCheck = await Users.find({ Username });
+    if (UsernameCheck.length === 0) {
+      const EmailCheck = await Client.find({
+        $or: [{ BusinessEmail }, { PrimaryContactEmail }],
       });
-      let Result1 = await userdata.save();
-      const clientdata = new Client({
-        UserID: Result1._id,
-        BusinessName,
-        BusinessEmail,
-        BusinessPhone,
-        BusinessAddress,
-        City,
-        State,
-        Zip,
-        Country,
-        PrimaryContactName,
-        PrimaryContactEmail,
-        PrimaryContactPhone,
-        LogoUrl,
-        CoverPhotoUrl,
-      });
-      let Result = await clientdata.save();
-      const userInRole = new UserInRole({ UserId: Result.UserID, RoleId: 2 });
-      await userInRole.save();
-      const productdata = AllProduct.map((product) => {
-        const tempprod = product.toObject();
-        delete tempprod._id;
-        return {
-          Client_id: Result._id,
-          ...tempprod,
-        };
-      });
-      const data = await ClientProductType.insertMany(productdata);
-      Result = Result.toObject();
-      Result = {
-        ...Result,
-        UserID: { _id: Result1._id, Username: Result1.Username },
-      };
-      res.status(200).send(Result);
+      if (!EmailCheck.length) {
+        if (Password) {
+          const AllProduct = await ProductType.find();
+          const HashedPassword = await bcrypt.hash(Password, 10);
+          const userdata = new Users({
+            Username,
+            HashedPassword,
+            LastLoginFromIp,
+            LastLoginAt,
+          });
+          let Result1 = await userdata.save();
+          const clientdata = new Client({
+            UserID: Result1._id,
+            BusinessName,
+            BusinessEmail,
+            BusinessPhone,
+            BusinessAddress,
+            City,
+            State,
+            Zip,
+            Country,
+            PrimaryContactName,
+            PrimaryContactEmail,
+            PrimaryContactPhone,
+            LogoUrl,
+            CoverPhotoUrl,
+          });
+          let Result = await clientdata.save();
+          const userInRole = new UserInRole({
+            UserId: Result.UserID,
+            RoleId: 2,
+          });
+          await userInRole.save();
+          const productdata = AllProduct.map((product) => {
+            const tempprod = product.toObject();
+            delete tempprod._id;
+            return {
+              Client_id: Result._id,
+              ...tempprod,
+            };
+          });
+          const data = await ClientProductType.insertMany(productdata);
+          Result = Result.toObject();
+          Result = {
+            ...Result,
+            UserID: { _id: Result1._id, Username: Result1.Username },
+          };
+          res.status(200).send(Result);
+        } else {
+          res.status(401).json({ message: "Password Is Undefind!!" });
+        }
+      } else {
+        if (EmailCheck[0].BusinessEmail === BusinessEmail) {
+          res.status(401).json({ message: "Business Email Already Exist!!" });
+        } else {
+          res
+            .status(401)
+            .json({ message: "Primary Contact Email Already Exist!!" });
+        }
+      }
+    } else {
+      res.status(401).json({ message: "Username Already Exist!!" });
     }
   } catch (e) {
     console.log(e);
@@ -197,9 +245,7 @@ module.exports.ClientLogin = async (req, res) => {
       .parse(req.headers["user-agent"])
       .device.toString();
     if (password) {
-      const user = await Users.find({ Username }, null, {
-        collation: { locale: "en", strength: 2 },
-      });
+      const user = await Users.find({ Username });
       if (user.length !== 0) {
         if (await bcrypt.compare(password, user[0].HashedPassword)) {
           const userinrole = await UserInRole.find({ UserId: user[0]._id });

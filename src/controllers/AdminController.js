@@ -32,9 +32,7 @@ module.exports.AdminLogin = async (req, res) => {
       .parse(req.headers["user-agent"])
       .device.toString();
     if (password) {
-      const user = await Users.find({ Username }, null, {
-        collation: { locale: "en", strength: 2 },
-      });
+      const user = await Users.find({ Username });
       // console.log(user[0]._id);
       if (user.length !== 0) {
         if (await bcrypt.compare(password, user[0].HashedPassword)) {

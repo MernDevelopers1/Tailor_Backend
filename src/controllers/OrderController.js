@@ -2,7 +2,7 @@ const { Order, OrderItem, OrderPayment } = require("../db/Schema");
 
 module.exports.AddOrder = async (req, res) => {
   try {
-    const {
+    let {
       ClientId,
       CustomerId,
       ShopId,
@@ -31,6 +31,13 @@ module.exports.AddOrder = async (req, res) => {
       PaymentAmount,
       PAdditionalComment,
     } = req.body;
+    // console.log("CompletedAt", CompletedAt);
+    CompletedAt =
+      (!CompletedAt || CompletedAt === "") && Status === "Completed"
+        ? new Date()
+        : CompletedAt !== null && Status !== "Completed"
+        ? null
+        : CompletedAt;
     const Orderobj = new Order({
       ClientId,
       CustomerId,
@@ -60,6 +67,14 @@ module.exports.AddOrder = async (req, res) => {
     let orderdata = await Orderobj.save();
     OrderItems.forEach((item) => {
       item.OrderId = orderdata._id;
+      console.log("Item CompletedAt", item.CompletedAt);
+      item.CompletedAt =
+        (!item.CompletedAt || item.CompletedAt === "") &&
+        item.ItemStatus === "Completed"
+          ? new Date()
+          : item.CompletedAt !== null && item.ItemStatus !== "Completed"
+          ? null
+          : item.CompletedAt;
     });
     const orderitemobj = await OrderItem.insertMany(OrderItems);
     let paymentdata = null;
@@ -91,7 +106,7 @@ module.exports.GetOrders = async (req, res) => {
 
     if (StoreId && StoreId !== "null") {
       const orderdata = await Order.find({ ShopId: StoreId }).sort({
-        OrderPlacedDate: -1,
+        _id: -1,
       });
       const orderIds = orderdata.map((obj) => obj._id);
       // console.log(orderIds);
@@ -122,7 +137,7 @@ module.exports.GetOrders = async (req, res) => {
       res.status(200).send(data);
     } else if (ClId) {
       const orderdata = await Order.find({ ClientId: ClId }).sort({
-        OrderPlacedDate: -1,
+        _id: -1,
       });
       const orderIds = orderdata.map((obj) => obj._id);
       // console.log(orderIds);
@@ -191,7 +206,7 @@ module.exports.UpdateOrder = async (req, res) => {
     } = req.body;
     // console.log("comp", CompletedAt);
     CompletedAt =
-      CompletedAt === null && Status === "Completed"
+      (!CompletedAt || CompletedAt === "") && Status === "Completed"
         ? new Date()
         : CompletedAt !== null && Status !== "Completed"
         ? null
@@ -246,7 +261,8 @@ module.exports.UpdateOrder = async (req, res) => {
     const OrderItemsdata = await Promise.all(
       OrderItems.map(async (Element) => {
         Element.CompletedAt =
-          Element.CompletedAt === null && Element.ItemStatus === "Completed"
+          (!Element.CompletedAt || Element.CompletedAt === "") &&
+          Element.ItemStatus === "Completed"
             ? new Date()
             : Element.CompletedAt !== null && Element.ItemStatus !== "Completed"
             ? null
