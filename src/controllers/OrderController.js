@@ -30,6 +30,7 @@ module.exports.AddOrder = async (req, res) => {
       OrderItems,
       PaymentAmount,
       PAdditionalComment,
+      newpayments,
     } = req.body;
     // console.log("CompletedAt", CompletedAt);
     CompletedAt =
@@ -78,13 +79,13 @@ module.exports.AddOrder = async (req, res) => {
     });
     const orderitemobj = await OrderItem.insertMany(OrderItems);
     let paymentdata = null;
-    if (PaymentAmount) {
-      const paymentobj = new OrderPayment({
-        OrderId: orderdata._id,
-        PaymentAmount,
-        AdditionalComments: PAdditionalComment,
+    if (newpayments.length) {
+      newpayments.forEach((item) => {
+        item.OrderId = orderdata._id;
       });
-      paymentdata = await paymentobj.save();
+      const paymentobj = await OrderPayment.insertMany(newpayments);
+      console.log("Payments:");
+      console.log(paymentobj);
     }
     orderdata = orderdata.toObject();
     orderdata = {
@@ -203,6 +204,7 @@ module.exports.UpdateOrder = async (req, res) => {
       OrderItems,
       PaymentAmount,
       PAdditionalComment,
+      newpayments,
     } = req.body;
     // console.log("comp", CompletedAt);
     CompletedAt =
@@ -244,18 +246,13 @@ module.exports.UpdateOrder = async (req, res) => {
       { new: true }
     );
     let paymentdata = null;
-    if (PaymentAmount) {
-      const paymentobj = new OrderPayment({
-        OrderId: _id,
-        PaymentAmount,
-        AdditionalComments: PAdditionalComment,
+    if (newpayments && newpayments.length) {
+      newpayments.forEach((item) => {
+        item.OrderId = orderdata._id;
       });
-      paymentdata = await paymentobj.save();
-      // paymentdata = await OrderPayment.findOneAndUpdate(
-      //   { OrderId: _id },
-      //   { $set: { PaymentAmount, PAdditionalComment } },
-      //   { new: true }
-      // );
+      const paymentobj = await OrderPayment.insertMany(newpayments);
+      console.log("Payments:");
+      console.log(paymentobj);
     }
     paymentdata = await OrderPayment.find({ OrderId: _id });
     const OrderItemsdata = await Promise.all(
