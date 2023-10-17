@@ -20,6 +20,7 @@
     "mongoose": "^7.3.0",
     "mongoose-unique-validator": "^4.0.0",
     "multer": "^1.4.5-lts.1",
+    "next": "^13.5.5",
     "useragent": "^2.3.0"
   }
 }

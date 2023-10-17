@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 
 async function connection(cd) {
   try {
-    const connect = await mongoose.connect(
-      "mongodb://127.0.1.1:27017/Tailor_App_Testing"
-    );
+    const connect = await mongoose.connect(process.env.db_url);
     if (connect) {
       console.log("db connected successfully");
       cd();

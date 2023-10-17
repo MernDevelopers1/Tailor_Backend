@@ -352,35 +352,35 @@ const order = mongoose.Schema(
     },
     BillingFullName: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingAddress: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingEmail: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingPhone: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingCity: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingState: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingZip: {
       type: String,
-      required: true,
+      // required: true,
     },
     BillingCountry: {
       type: String,
-      required: true,
+      // required: true,
     },
     ShippingFullName: {
       type: String,
@@ -447,7 +447,7 @@ const orderItem = mongoose.Schema(
     },
     DeliveryPickupStatus: {
       type: String,
-      required: true,
+      // required: true,
     },
     ItemStatus: {
       type: String,
