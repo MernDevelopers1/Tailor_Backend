@@ -342,6 +342,11 @@ const order = mongoose.Schema(
 
       default: Date.now,
     },
+    ExpectedCompletionDate: {
+      type: Date,
+
+      required: true,
+    },
     Status: {
       type: String,
       required: true,
