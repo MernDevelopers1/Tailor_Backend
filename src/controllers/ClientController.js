@@ -37,7 +37,16 @@ module.exports.UniqueCheck = async (req, res) => {
     res.status(500).send(e);
   }
 };
-
+module.exports.getLogo = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const profile = await Client.findOne({ _id }, { LogoUrl: 1 });
+    res.status(200).send(profile);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e);
+  }
+};
 module.exports.addClient = async (req, res) => {
   try {
     const {

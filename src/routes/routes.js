@@ -12,6 +12,7 @@ const {
   ChangeCover,
   ChangePassword,
   UniqueCheck,
+  getLogo,
 } = require("../controllers/ClientController");
 const {
   addStore,
@@ -74,6 +75,7 @@ router.patch("/Adminpassword/:_id", ChangeAdminPassword);
 router.post("/ClientUnique", UniqueCheck);
 router.post("/Client", addClient);
 router.post("/Clientlogin", ClientLogin);
+router.get("/Clientlogo/:_id", getLogo);
 router.get("/Clientlogin", Getloginclient);
 router.get("/Client", getAllClient);
 router.get("/Client/:_id", getClient);
