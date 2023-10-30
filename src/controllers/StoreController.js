@@ -103,11 +103,13 @@ module.exports.getSpecificClientStores = async (req, res) => {
     const page1 = page && page !== "undefined" ? parseInt(page) : 1;
     const skip = (page1 - 1) * 20;
     let fillter = {};
+    let totalCount = 0;
     if (ClientId && ClientId !== "undefined") fillter.ClientId = ClientId;
     if (_id & (_id !== "undefined")) fillter._id = _id;
-    if (page && page === "undefined")
-      totalCount = await ClientShops.countDocuments({ ClientId }).exec();
-
+    if (page && page === "undefined") {
+      totalCount = await ClientShops.countDocuments(fillter).exec();
+      // console.log(totalCount);
+    }
     const Stores = await ClientShops.find(fillter)
       .sort({
         _id: -1,
