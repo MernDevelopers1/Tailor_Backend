@@ -146,8 +146,19 @@ module.exports.addClient = async (req, res) => {
 };
 module.exports.getAllClient = async (req, res) => {
   try {
-    const result = await Client.find().populate("UserID", "Username").exec();
-    res.status(200).json(result);
+    const { page } = req.query;
+    const page1 = page && page !== "undefined" ? parseInt(page) : 1;
+    const skip = (page1 - 1) * 20;
+    totalCount = await Client.countDocuments().exec();
+    const result = await Client.find()
+      .populate("UserID", "Username")
+      .sort({
+        _id: -1,
+      })
+      .skip(skip)
+      .limit(20)
+      .exec();
+    res.status(200).json({ data: result, totalCount });
   } catch (e) {
     res.status(500).json(e);
   }

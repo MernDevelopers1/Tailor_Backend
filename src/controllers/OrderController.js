@@ -103,73 +103,71 @@ module.exports.AddOrder = async (req, res) => {
   }
 };
 module.exports.GetOrders = async (req, res) => {
-  // console.log(req.params);
   try {
     const { ClId, StoreId } = req.params;
-
-    if (StoreId && StoreId !== "null") {
-      const orderdata = await Order.find({ ShopId: StoreId }).sort({
-        _id: -1,
-      });
-      const orderIds = orderdata.map((obj) => obj._id);
-      // console.log(orderIds);
-      const orderitemdata = await OrderItem.find({
-        OrderId: { $in: orderIds },
-      });
-      const orderPaymentdata = await OrderPayment.find({
-        OrderId: { $in: orderIds },
-      });
-      const data = orderdata.map((order) => {
-        // console.log(orderitemdata);
-        const tempOI = orderitemdata.filter((item) =>
-          item.OrderId.equals(order._id)
-        );
-        const tempOP = orderPaymentdata.filter((item) =>
-          item.OrderId.equals(order._id)
-        );
-        // console.log(tempOI);
-        // orderdata = orderdata.toObject();
-        const newOrderData = {
-          ...order.toObject(), // Convert Mongoose document to plain object
-          OrderItems: [...tempOI],
-          PaymentHistory: [...tempOP],
-        };
-
-        return newOrderData;
-      });
-      res.status(200).send(data);
-    } else if (ClId) {
-      const orderdata = await Order.find({ ClientId: ClId }).sort({
-        _id: -1,
-      });
-      const orderIds = orderdata.map((obj) => obj._id);
-      // console.log(orderIds);
-      const orderitemdata = await OrderItem.find({
-        OrderId: { $in: orderIds },
-      });
-      const orderPaymentdata = await OrderPayment.find({
-        OrderId: { $in: orderIds },
-      });
-      const data = orderdata.map((order) => {
-        // console.log(orderitemdata);
-        const tempOI = orderitemdata.filter((item) =>
-          item.OrderId.equals(order._id)
-        );
-        const tempOP = orderPaymentdata.filter((item) =>
-          item.OrderId.equals(order._id)
-        );
-        // console.log(tempOI);
-        // orderdata = orderdata.toObject();
-        const newOrderData = {
-          ...order.toObject(), // Convert Mongoose document to plain object
-          OrderItems: [...tempOI],
-          PaymentHistory: [...tempOP],
-        };
-
-        return newOrderData;
-      });
-      res.status(200).send(data);
+    const { page, today, status, id } = req.query;
+    const page1 = page && page !== "undefined" ? parseInt(page) : 1;
+    const skip = (page1 - 1) * 20;
+    const filter = {};
+    let orderdata = undefined;
+    let totalCount = null;
+    if (id && id !== "undefined") {
+      filter._id = id;
     }
+
+    if (status && status !== "undefined") {
+      filter.Status = status;
+    }
+    if (StoreId && StoreId !== "null") {
+      filter.ShopId = StoreId;
+    }
+    if (ClId && ClId !== "null" && ClId !== "undefined") {
+      filter.ClientId = ClId;
+    }
+    if (page && page === "undefined") {
+      totalCount = await Order.countDocuments(filter).exec();
+    }
+    if (today && today !== "undefined") {
+      orderdata = await Order.find({
+        ...filter,
+        ExpectedCompletionDate: { $eq: new Date(today) },
+      })
+        .sort({
+          _id: -1,
+        })
+        .exec();
+    } else {
+      orderdata = await Order.find(filter)
+        .sort({
+          _id: -1,
+        })
+        .skip(skip)
+        .limit(20)
+        .exec();
+    }
+    const orderIds = orderdata.map((obj) => obj._id);
+    const orderitemdata = await OrderItem.find({
+      OrderId: { $in: orderIds },
+    });
+    const orderPaymentdata = await OrderPayment.find({
+      OrderId: { $in: orderIds },
+    });
+    const data = orderdata.map((order) => {
+      const tempOI = orderitemdata.filter((item) =>
+        item.OrderId.equals(order._id)
+      );
+      const tempOP = orderPaymentdata.filter((item) =>
+        item.OrderId.equals(order._id)
+      );
+      const newOrderData = {
+        ...order.toObject(),
+        OrderItems: [...tempOI],
+        PaymentHistory: [...tempOP],
+      };
+
+      return newOrderData;
+    });
+    res.status(200).json({ data, totalCount });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
