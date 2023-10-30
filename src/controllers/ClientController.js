@@ -149,7 +149,8 @@ module.exports.getAllClient = async (req, res) => {
     const { page } = req.query;
     const page1 = page && page !== "undefined" ? parseInt(page) : 1;
     const skip = (page1 - 1) * 20;
-    totalCount = await Client.countDocuments().exec();
+    if (page && page === "undefined")
+      totalCount = await Client.countDocuments().exec();
     const result = await Client.find()
       .populate("UserID", "Username")
       .sort({

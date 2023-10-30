@@ -98,18 +98,30 @@ module.exports.getAllStores = async (req, res) => {
 module.exports.getSpecificClientStores = async (req, res) => {
   try {
     // console.log(req.params);
-    const { _id } = req.params;
+    const { ClientId } = req.params;
+    const { page, _id } = req.query;
+    const page1 = page && page !== "undefined" ? parseInt(page) : 1;
+    const skip = (page1 - 1) * 20;
+    let fillter = {};
+    if (ClientId && ClientId !== "undefined") fillter.ClientId = ClientId;
+    if (_id & (_id !== "undefined")) fillter._id = _id;
+    if (page && page === "undefined")
+      totalCount = await ClientShops.countDocuments({ ClientId }).exec();
 
-    const id = new mongoose.Types.ObjectId(_id);
-
-    const Stores = await ClientShops.find({ ClientId: _id });
+    const Stores = await ClientShops.find(fillter)
+      .sort({
+        _id: -1,
+      })
+      .skip(skip)
+      .limit(20)
+      .exec();
     const data = Stores.map((item) => {
       const temp = item.toObject();
       delete temp.Password;
       return temp;
     });
     // console.log(Stores);
-    res.status(200).send(data);
+    res.status(200).json({ data, totalCount });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
