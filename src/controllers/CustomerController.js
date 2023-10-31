@@ -134,15 +134,32 @@ module.exports.getAllCustomer = async (req, res) => {
 module.exports.getCustomer = async (req, res) => {
   try {
     const { _id } = req.params;
-    const ClientCustomerdata = await ClientCustomers.find({
-      ClientId: _id,
-    });
-    let CustomerId = [...ClientCustomerdata[0].CustomerIds];
+    const { page, ClientId } = req.query;
+    const page1 = page && page !== "undefined" ? parseInt(page) : 1;
+    const skip = (page1 - 1) * 20;
+    let totalCount = 0;
+    let result = null;
+    if (ClientId && ClientId !== "undefined") {
+      const ClientCustomerdata = await ClientCustomers.find({
+        ClientId,
+      });
+      let CustomerId = [...ClientCustomerdata[0].CustomerIds];
+      if (page && page === "undefined") totalCount = CustomerId.length;
+      result = await Customer.find({ _id: { $in: CustomerId } })
+        .populate("UserId", "Username")
+        .sort({
+          _id: -1,
+        })
+        .skip(skip)
+        .limit(20)
+        .exec();
+    } else {
+      result = await Customer.find({ _id })
+        .populate("UserId", "Username")
 
-    const result = await Customer.find({ _id: { $in: CustomerId } })
-      .populate("UserId", "Username")
-      .exec();
-    res.status(200).json(result);
+        .exec();
+    }
+    res.status(200).json({ data: result, totalCount });
   } catch (e) {
     console.log(e);
     res.status(500).json(e);

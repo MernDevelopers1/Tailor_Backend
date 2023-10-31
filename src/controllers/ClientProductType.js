@@ -35,20 +35,15 @@ module.exports.GetSpecificClientProduct = async (req, res) => {
   try {
     const { Client_id, _id } = req.params;
     const id = new mongoose.Types.ObjectId(Client_id);
-    if (!_id) {
-      // console.log(id);
-
-      const SpecificClientProduct = await ClientProductType.find({
-        Client_id: id,
-      });
-      res.status(200).json(SpecificClientProduct);
-    } else {
-      // console.log("Else Statment")
-      const SpecificProduct = await ClientProductType.find({
-        $and: [{ _id }, { Client_id: id }],
-      });
-      res.status(200).json(SpecificProduct);
+    let filter = {};
+    if (_id) {
+      filter._id = _id;
     }
+    if (Client_id) {
+      filter.Client_id = Client_id;
+    }
+    const SpecificProduct = await ClientProductType.find(filter);
+    res.status(200).json(SpecificProduct);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);

@@ -89,7 +89,7 @@ router.delete("/Client/:_id", DeleteClient);
 //=======================Store Routes Start====================================
 router.post("/StoreUnique", CheckUniqueStore);
 router.post("/Store", addStore);
-router.get("/Store", getAllStores);
+// router.get("/Store", getAllStores); //Not Impelemented on Frontend
 router.get("/Store/:_id", getSpecificClientStores);
 router.patch("/Store", UpdateStores);
 router.patch("/Store/:_id", ChangeStoreActiveStatus);
@@ -107,7 +107,7 @@ router.delete("/Customer/:_id", DeleteCustomer);
 //=======================Customer Routes End===================================
 //=======================Client Product Routes Start=================================
 router.post("/ClientProduct", addProduct);
-router.get("/ClientProduct", GetAllProduct);
+// router.get("/ClientProduct", GetAllProduct); //Not Impelemented on Frontend
 router.get("/ClientProduct/:Client_id/:_id?", GetSpecificClientProduct);
 router.patch("/ClientProduct", UpdateProduct);
 router.patch("/ClientProduct/:_id", AddMoreAtt);
