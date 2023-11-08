@@ -33,26 +33,11 @@ module.exports.addCustomer = async (req, res) => {
     const result = await Customer.find({ Phone1 })
       .populate("UserId", "Username")
       .exec();
-    // console.log(result);
     ClientId = new mongoose.Types.ObjectId(ClientId);
-    console.log(ClientId);
     const clientcustomer = await ClientCustomers.findOne({ ClientId });
-    console.log(clientcustomer);
     if (!result.length) {
       Password = Password || "TailorCustomer1!";
-      if (!Username) {
-        x = 0;
-        let defaultname = FullName.replace(/ /g, "");
-        Username = defaultname;
-        while (1) {
-          console.log(Username);
-          const data = await Users.find({ Username });
-          if (!data.length) {
-            break;
-          }
-          Username = `${defaultname}${++x}`;
-        }
-      }
+      Username = Phone1;
 
       if (Password) {
         const HashedPassword = await bcrypt.hash(Password, 10);
@@ -91,10 +76,9 @@ module.exports.addCustomer = async (req, res) => {
           await newclietcustomer.save();
         }
         const userInRole = new UserInRole({ UserId: Result.UserId, RoleId: 3 });
-        Result = Result.toObject();
         await userInRole.save();
+        Result = Result.toObject();
         Result.UserId = { _id: Result1._id, Username: Result1.Username };
-        // console.log(Result);
         res.status(200).send(Result);
       }
     } else {
@@ -102,7 +86,7 @@ module.exports.addCustomer = async (req, res) => {
         await ClientCustomers.findOneAndUpdate(
           { ClientId },
           {
-            $push: { CustomerIds: result[0]._id },
+            $addToSet: { CustomerIds: result[0]._id },
           }
         );
       } else {

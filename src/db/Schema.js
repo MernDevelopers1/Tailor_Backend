@@ -216,7 +216,7 @@ const customers = mongoose.Schema(
     },
     FullName: {
       type: String,
-      required: true,
+      // required: true,
     },
     Phone1: {
       type: String,
@@ -322,6 +322,7 @@ const clientProductType = mongoose.Schema({
 });
 const order = mongoose.Schema(
   {
+    id: { type: Number, required: true, unique: true },
     ClientId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Clients",
@@ -503,6 +504,11 @@ const orderPayment = mongoose.Schema(
     timestamps: true,
   }
 );
+const sequenceSchema = mongoose.Schema({
+  model: String, // The name of the model
+  field: String, // The field that needs auto-incrementing
+  value: { type: Number, default: 0 }, // The current value of the field
+});
 const Client = mongoose.model("Clients", client);
 const ClientCustomers = mongoose.model("ClientCustomer", clientCustomers);
 const Users = mongoose.model("User", users);
@@ -518,6 +524,7 @@ const ClientProductType = mongoose.model(
   "ClientProductType",
   clientProductType
 );
+const Sequence = mongoose.model("Sequence", sequenceSchema);
 module.exports = {
   Client,
   Users,
@@ -531,4 +538,5 @@ module.exports = {
   OrderPayment,
   ClientProductType,
   ClientCustomers,
+  Sequence,
 };

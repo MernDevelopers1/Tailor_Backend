@@ -208,7 +208,9 @@ module.exports.StoreLogin = async (req, res) => {
   try {
     const { Username, password } = req.body;
     if (password) {
-      const Shops = await ClientShops.find({ Username })
+      const Shops = await ClientShops.find({ Username }, null, {
+        collation: { locale: "en", strength: 2 },
+      })
         .populate({
           path: "ClientId",
           select: "IsActive LogoUrl",

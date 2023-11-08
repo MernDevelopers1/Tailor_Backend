@@ -1,5 +1,13 @@
-const { Order, OrderItem, OrderPayment } = require("../db/Schema");
+const { Order, OrderItem, OrderPayment, Sequence } = require("../db/Schema");
+async function getNextSequence(modelName, fieldName) {
+  const sequence = await Sequence.findOneAndUpdate(
+    { model: modelName, field: fieldName },
+    { $inc: { value: 1 } },
+    { new: true, upsert: true }
+  );
 
+  return sequence.value;
+}
 module.exports.AddOrder = async (req, res) => {
   try {
     let {
@@ -33,6 +41,7 @@ module.exports.AddOrder = async (req, res) => {
       PAdditionalComment,
       newpayments,
     } = req.body;
+    const id = await getNextSequence("Order", "id");
     // console.log("CompletedAt", CompletedAt);
     CompletedAt =
       (!CompletedAt || CompletedAt === "") && Status === "Completed"
@@ -41,6 +50,7 @@ module.exports.AddOrder = async (req, res) => {
         ? null
         : CompletedAt;
     const Orderobj = new Order({
+      id,
       ClientId,
       CustomerId,
       ShopId,
