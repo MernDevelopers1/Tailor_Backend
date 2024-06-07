@@ -18,8 +18,6 @@ module.exports.UniqueCheck = async (req, res) => {
     if (name === "Username") {
       const Username = await Users.find({ Username: value });
       if (Username.length) {
-        console.log(name);
-
         res.status(409).json({ message: "Already Exist!" });
       } else {
         res.sendStatus(200);
@@ -140,7 +138,7 @@ module.exports.addClient = async (req, res) => {
       res.status(401).json({ message: "Username Already Exist!!" });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -254,7 +252,7 @@ module.exports.DeleteClient = async (req, res) => {
     if (DeleteClient && DeleteUser && DeleteUserImRole && DeleteStores)
       res.status(200).json("Deleted Successfully!!");
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -321,7 +319,7 @@ module.exports.ClientLogin = async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -334,7 +332,7 @@ module.exports.Getloginclient = async (req, res) => {
       .exec();
     res.status(200).send(data);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -352,7 +350,7 @@ module.exports.ChangeActiveStatus = async (req, res) => {
     data = { ...data, UserID: userdata[0] };
     res.status(200).send(data);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -367,7 +365,7 @@ module.exports.ChangeProfile = async (req, res) => {
           const filepath = path.join(__dirname, `../../${old.LogoUrl}`);
           fs.unlink(filepath, (err) => {
             if (err) {
-              console.log(err);
+              console.error(err);
               // res.status(500).send(err);
             } else {
               console.log(`File ${old.LogoUrl} has been deleted.`);
@@ -377,7 +375,7 @@ module.exports.ChangeProfile = async (req, res) => {
           const filepath = path.join(__dirname, `../../public/${old.LogoUrl}`);
           fs.unlink(filepath, (err) => {
             if (err) {
-              console.log(err);
+              console.error(err);
               // res.status(500).send(err);
             } else {
               console.log(`File ${old.LogoUrl} has been deleted.`);
@@ -404,7 +402,7 @@ module.exports.ChangeProfile = async (req, res) => {
       res.status(req.error.status || 500).send(req.error);
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).json(e);
   }
 };
@@ -427,7 +425,7 @@ module.exports.ChangeCover = async (req, res) => {
       fs.unlink(filepath, (err) => {
         if (err) {
           console.error(err);
-          res.status(500).send(err);
+          // res.status(500).send(err);
         } else {
           console.log(`File ${old.CoverPhotoUrl} has been deleted.`);
         }
@@ -449,7 +447,7 @@ module.exports.ChangeCover = async (req, res) => {
     };
     res.status(200).send(data);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).json(e);
   }
 };
@@ -482,7 +480,7 @@ module.exports.ChangePassword = async (req, res) => {
       res.status(401).json({ message: "Old password provided is incorrect!!" });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };

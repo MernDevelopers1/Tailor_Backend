@@ -102,7 +102,7 @@ module.exports.addCustomer = async (req, res) => {
         .send({ ...data, messsage: "Phone Number Already Registred!!" });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -111,7 +111,7 @@ module.exports.getAllCustomer = async (req, res) => {
     const result = await Customer.find().populate("UserId", "Username").exec();
     res.status(200).json(result);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).json(e);
   }
 };
@@ -145,7 +145,7 @@ module.exports.getCustomer = async (req, res) => {
     }
     res.status(200).json({ data: result, totalCount });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).json(e);
   }
 };
@@ -216,7 +216,7 @@ module.exports.UpdateCustomer = async (req, res) => {
     };
     res.status(200).json(data);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).json(e);
   }
 };
@@ -224,7 +224,6 @@ module.exports.DeleteCustomer = async (req, res) => {
   try {
     // res.status(200).json(req.params);
     const { _id } = req.params;
-    // console.log(_id);
     const id = new mongoose.Types.ObjectId(_id);
     const DeleteCustomer = await Customer.findByIdAndRemove({ _id });
     const DeleteUser = await Users.deleteOne({ _id: DeleteCustomer.UserId });
@@ -232,7 +231,7 @@ module.exports.DeleteCustomer = async (req, res) => {
     if (DeleteCustomer && DeleteUser && DeleteUserImRole)
       res.status(200).json({ messsage: "Deleted Successfully!!" });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -246,7 +245,7 @@ module.exports.verifyPhone = async (req, res) => {
       res.status(200).send({ message: "Not exist!!" });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };

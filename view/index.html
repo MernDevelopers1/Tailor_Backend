@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <title>Bill Print</title>
+</head>
+<body style="margin:0; padding: 0; font-family: Arial, Helvetica, sans-serif;">
+    <div style="margin: 5px 10px">
+        <div  style="background-color:#891555e2 ;
+            color: white;
+            padding: 0px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;">
+            <div style="text-align: center;">
+
+                <h1 style="margin: 2px 0px;">Samina Kauser</h1>
+                <h2 style="margin: 2px 0px; font-size: medium;">Fashion Designing <br> Trailor & EMB</h2>
+            </div>
+            <div class="me-3">
+                <img src="data:image/png;base64,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" />
+            </div>
+        </div>
+        <div style="text-align: center; border-bottom: 2px solid; border-color: #891555e2; padding: 2px 0px; color: #891555e2; font-size: larger;">
+            <h3 style="margin: 2px 0px">Saeed: 055-6446167, 055-6879268</h3>
+            <p style="margin: 2px 0px">Email: saeedsaghar1979@gmail.com, saeedsaghar1979@yahoo.com</p>
+        </div>
+        <div style="margin-top: 10px; display: flex; justify-content: space-between; margin-bottom: 30px;">
+<div style="display: flex; justify-content: start; width: 25%;">
+                <h5 style="margin: 0px 3px;">No.</h5>
+                <div style="border-bottom: 1px solid #891555; width: 100%;"> </div>
+            </div>
+            <div style="display: flex; justify-content: start; width: 30%;">
+                <h5 style="margin: 0px 3px; width: 170px;">Booking Date.</h5>
+                <div style="border-bottom: 1px solid #891555; width: 100%;"> </div>
+            </div>
+        </div>
+        <div style="margin-top: 10px; display: flex; justify-content: space-between; ">
+<div style="display: flex; justify-content: start; width: 70%;">
+                <h5 style="margin: 0px 3px; width: 75px;">Mr. & Mrs.</h5>
+                <div style="border-bottom: 1px solid #891555; width: 100%;"> </div>
+            </div>
+            <div style="display: flex; justify-content: start; width: 30%;">
+                <h5 style="margin: 0px 3px; width: 170px;">Delivery Date.</h5>
+                <div style="border-bottom: 1px solid #891555; width: 100%;"> </div>
+            </div>
+        </div>
+        <div >
+            <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+    <thead>
+        <tr>
+            <th style="border: 2px solid #891555; width: 5%; padding: 8px 5px; border-right: 2px solid white; background-color: #891555;"><span style="background-color: white; color: #891555; padding: 5px; border-radius: 7px;">Qty.</span></th>
+            <th style="border: 2px solid #891555; width: 70%; padding: 8px 5px; border-right: 2px solid white; background-color: #891555;"><span style="background-color: white; color: #891555; padding: 5px; border-radius: 7px;">Particular</span></th>
+            <th style="border: 2px solid #891555; padding: 8px 5px; border-right: 2px solid white; background-color: #891555;"><span style="background-color: white; color: #891555; padding: 5px; border-radius: 7px;">Rate</span></th>
+            <th style="border: 2px solid #891555; padding: 8px 5px; border-right: 2px solid white; background-color: #891555;"><span style="background-color: white; color: #891555; padding: 5px; border-radius: 7px;">RateAmount</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+        <tr>
+            <td style="border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Qty.</td>
+            <td style="border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;">Particular</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">Rate</td>
+            <td style="border-left: 2px solid #891555; padding: 5px; border-right: 2px solid #891555; text-align: center;">RateAmount</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td style=" border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;"></td>
+            <td style=" border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;"></td>
+            <td style="border: 2px solid #891555; padding: 5px;  text-align: center; font-weight: bold; color: #891555;">Advance</td>
+            <td style="border: 2px solid #891555; padding: 5px;  text-align: center;"></td>
+        </tr>
+        <tr>
+            <td style=" border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;"></td>
+            <td style=" border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;"></td>
+            <td style="border: 2px solid #891555; padding: 5px;  text-align: center; font-weight: bold; color: #891555;">Total</td>
+            <td style="border: 2px solid #891555; padding: 5px;  text-align: center;"></td>
+        </tr>
+        <tr>
+            <td style="border-bottom: 2px solid #891555; border-left: 2px solid #891555; width: 5%; padding: 5px; border-right: 2px solid #891555; text-align: center;"></td>
+            <td style="border-bottom: 2px solid #891555; border-left: 2px solid #891555; width: 70%; padding: 5px; border-right: 2px solid #891555; text-align: center;"></td>
+            <td style="border: 2px solid #891555; padding: 5px;  text-align: center; font-weight: bold; color: #891555;">To Paid</td>
+            <td style="border: 2px solid #891555; padding: 5px;  text-align: center;"></td>
+        </tr>
+    </tfoot>
+    <!-- Add your table body (rows) here -->
+</table>
+
+        </div>
+        <div style="display: flex; justify-content: space-between; color: #891555; font-weight: 600;">
+            <div>
+                <p>
+                    Area Al-Merijia, Old Sharjah Cinema, Near Zam Zam Market, PO Box # 130524
+                </p>
+
+            </div>
+
+            <div style="align-self: center; text-align: left; width: 25%;">
+
+                <div style="display: flex; font-weight: 600; justify-content: start; ">
+                    <h4 style="margin: 0px 3px; ">Signature.</h4>
+                    <div style="border-bottom: 2px solid #891555; width: 100%;"> </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+    </div>
+
+</body>
+</html>

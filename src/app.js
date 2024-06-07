@@ -19,6 +19,6 @@ app.use((err, req, res, next) => {
 const Port = process.env.PORT || 5000;
 connection(() =>
   app.listen(Port, () => {
-    console.log("Server is Running!");
+    console.log(`Server is Running! ${Port}`);
   })
 );

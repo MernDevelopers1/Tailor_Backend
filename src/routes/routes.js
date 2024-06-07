@@ -63,6 +63,7 @@ const {
   UpdateDefaultProduct,
   DeleteDefaultProduct,
 } = require("../controllers/DefaultProductType");
+const {printApi} = require("../controllers/SomeOtherController");
 
 router.post("/upload", uploadImage, upload);
 //-----------------------Admin Routes Start------------------------------------
@@ -90,7 +91,7 @@ router.delete("/Client/:_id", DeleteClient);
 router.post("/StoreUnique", CheckUniqueStore);
 router.post("/Store", addStore);
 // router.get("/Store", getAllStores); //Not Impelemented on Frontend
-router.get("/Store/:_id", getSpecificClientStores);
+router.get("/Store/:ClientId", getSpecificClientStores);
 router.patch("/Store", UpdateStores);
 router.patch("/Store/:_id", ChangeStoreActiveStatus);
 router.patch("/Storepassword/:_id", ChangeStorePassword);
@@ -127,4 +128,8 @@ router.delete("/Order/:_id", DeleteOrder);
 router.post("/addpayment", AddPayment);
 router.post("/Orderstatus", UpdateOrderStatus);
 //=======================Order Routes End======================================
+//=======================Some Other Api routes==========================================
+router.get("/Print/:orderId",printApi)
+
+//=======================Some Other Api routes End======================================
 module.exports = router;

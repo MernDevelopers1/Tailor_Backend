@@ -9,8 +9,6 @@ module.exports.CheckUniqueStore = async (req, res) => {
     if (name === "Username") {
       const Username = await ClientShops.find({ Username: value });
       if (Username.length) {
-        console.log(name);
-
         res.status(409).json({ message: "Already Exist!" });
       } else {
         res.sendStatus(200);
@@ -77,7 +75,7 @@ module.exports.addStore = async (req, res) => {
       }
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -87,7 +85,6 @@ module.exports.getAllStores = async (req, res) => {
     const data = allStore.map((item) => {
       const temp = item.toObject();
       delete temp.Password;
-      console.log(temp.password);
       return temp;
     });
     res.status(200).send(data);
@@ -97,7 +94,6 @@ module.exports.getAllStores = async (req, res) => {
 };
 module.exports.getSpecificClientStores = async (req, res) => {
   try {
-    // console.log(req.params);
     const { ClientId } = req.params;
     const { page, _id } = req.query;
     const page1 = page && page !== "undefined" ? parseInt(page) : 1;
@@ -108,7 +104,6 @@ module.exports.getSpecificClientStores = async (req, res) => {
     if (_id & (_id !== "undefined")) fillter._id = _id;
     if (page && page === "undefined") {
       totalCount = await ClientShops.countDocuments(fillter).exec();
-      // console.log(totalCount);
     }
     const Stores = await ClientShops.find(fillter)
       .sort({
@@ -122,10 +117,9 @@ module.exports.getSpecificClientStores = async (req, res) => {
       delete temp.Password;
       return temp;
     });
-    // console.log(Stores);
     res.status(200).json({ data, totalCount });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -190,7 +184,7 @@ module.exports.UpdateStores = async (req, res) => {
       res.status(200).json(data);
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -200,7 +194,7 @@ module.exports.DeleteStore = async (req, res) => {
     const DeletedStore = await ClientShops.deleteOne({ _id });
     res.status(200).json(DeletedStore);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -218,7 +212,6 @@ module.exports.StoreLogin = async (req, res) => {
         .exec();
       if (Shops.length !== 0) {
         if (await bcrypt.compare(password, Shops[0].Password)) {
-          console.log(Shops[0].IsActive);
           if (Shops[0].ClientId.IsActive && Shops[0].IsActive) {
             const data = Shops[0].toObject();
             delete data.Password;
@@ -256,7 +249,7 @@ module.exports.StoreLogin = async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -289,7 +282,7 @@ module.exports.ChangeStorePassword = async (req, res) => {
       res.status(401).json({ message: "Old password provided is incorrect!!" });
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
@@ -297,18 +290,15 @@ module.exports.ChangeStoreActiveStatus = async (req, res) => {
   try {
     const { _id } = req.params;
     const { IsActive } = req.body;
-    console.log(IsActive);
-    console.log(_id);
     const changeStatus = await ClientShops.findByIdAndUpdate(
       { _id },
       { $set: { IsActive } },
       { new: true }
     );
     let data = changeStatus.toObject();
-    console.log(data);
     res.status(200).send(data);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(500).send(e);
   }
 };
