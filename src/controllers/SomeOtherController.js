@@ -7,7 +7,6 @@ const {dateformator} = require("./dateformator");
 module.exports.printApi = async (req,res) =>{
     try{
     const id = req.params.orderId;
-    console.log(id);
      const [orderData, orderItemData, orderPaymentData] = await Promise.all([
         Order.findOne({ _id: id }).select('id ClientId CustomerId ShopId OrderPlacedDate ExpectedCompletionDate'),
         OrderItem.find({ OrderId: id }).select('ProductTypeId ItemCost ItemDiscount ItemSalesTax'),
